@@ -1,0 +1,581 @@
+
+\documentclass[12pt,a4paper]{config/myConfig}
+\usepackage{silence}
+\WarningFilter{latex}{You have requested}
+\usepackage{config/myDependencies}
+\usepackage{style/myEnv}
+\usepackage{style/myCommands}
+\usepackage{style/myColors}
+
+\addbibresource{bibliography.bib}  % your .bib file
+
+%Number of the practica for this assigment:
+\newcommand{\AssigmentNumber}{Practica 8}
+\newcommand{\AssigmentDate}{21 de Abril del 2025}
+%------------------
+%If any computer language used:
+\newcommand{\Rcode}{R - version 3.4.4}
+%----------------------
+%Palabras Clave para el informe:
+\newcommand{\PalabrasClave}{\small \it
+Gases ideales,$\ $Radiación Térmica,$\ $Simulación Física,$\ $
+}
+
+\title{\Large $\ $\\ \bf Dos experimentos de Termodinámica simulados con PhET}
+
+\author
+\info
+
+\abstract{\PalabrasClave
+\normalsize
+\\[17pt]
+{\bf Abstract.} En este trabajo se presentan dos experimentos de simulación que abordan aspectos fundamentales de la termodinámica y la radiación de cuerpo negro. En el primero, se estimó la constante de Stefan–Boltzmann y se confirmó la ley de potencia \(I \propto T^4\) mediante un ajuste de modelo potencial sobre datos simulados, obteniendo una intersección concordante con el valor teórico al 99 \% de confianza y un coeficiente de determinación \(R^2 \approx 1\). En el segundo, se ajustaron modelos lineales de presión frente a temperatura para cuatro poblaciones de partículas, demostrando que el intercepto tiende a cero y validando así la ley de los gases ideales y la existencia del cero absoluto con 99 \% de confianza. Ambos experimentos muestran errores estándar mínimos y residuos bien comportados, lo que respalda la consistencia de las simulaciones ideales y la utilidad de la estadística de los modelos propuestos.}
+
+\sisetup{
+  separate-uncertainty = true,
+  table-number-alignment = center,
+  detect-weight = true,
+  detect-family = true
+}
+
+\begin{document}
+\thispagestyle{myheadings}
+\pagestyle{myheadings}
+\markright{\tt \AssigmentNumber|    \AssigmentDate}%check the date
+
+
+
+\section{Marco Conceptual}
+\label{sec:MARCO-CONCEPTUAL}
+
+\subsection{Antecedentes}
+\label{sec:ANTECEDENTES}
+
+De \citet{physicsTextbook} sabemos que la cantidad de calor transferido por unidad de tiempo debido a ondas electromagnéticas viene dada por la ley de Stefan–Boltzmann,
+
+\[
+H = \sigma\,e\,A\,T^4,
+\]
+
+donde \(\sigma\) es la constante de Stefan–Boltzmann, \(e\) la emisividad, \(A\) el área emisora y \(T\) la temperatura absoluta. Cuando el cuerpo actúa como un cuerpo negro ideal (\(e=1\)) y el área es fija, el flujo radiante \(H\) puede interpretarse como una intensidad \(I\) que sigue una ley de potencia en \(T\). Por tanto, se reescribe experimentalmente como
+
+\[
+I = e^{b_0}T^{b_1},
+\]
+
+en la que \(b_0\) y \(b_1\) son parámetros a estimar. Este planteamiento coincide con la forma de un modelo de potencia (“power–law”) ampliamente usado en física y en modelado empírico \citep{christensen2020analysis, nelson2006applied}.
+
+Teóricamente, bajo la hipótesis de cuerpo negro, se espera que
+
+\[
+b_1 = 4,
+\qquad
+b_0 = \ln(\sigma\,A),
+\]
+
+pero en la práctica factores como emisividad no ideal o ruido experimental requieren calibrar ambos parámetros empíricamente.
+
+Para facilitar la estimación, suele suponerse un error multiplicativo,
+
+\[
+I_i = e^{b_0}T_i^{b_1}\,\eta_i,
+\]
+
+con \(\eta_i\) un término de ruido log-normal. Al aplicar logaritmos naturales,
+
+\[
+\ln I_i = b_0 + b_1\ln T_i + \epsilon_i,
+\]
+
+donde \(\epsilon_i = \ln\eta_i\) es ruido aproximado gaussiano. De este modo, la regresión se realiza en escala log–log usando mínimos cuadrados ordinarios, conservando la conexión con la física subyacente \citep{box1976transformation}.
+
+Estudios experimentales que analizan irradiación solar y emisividad a alta temperatura han implementado esta regresión log–log para verificar la validez del exponente \(4\)  y cuantificar correcciones superficiales en \(b_1\) \citep{smith2018emissivity}. Se confirma que, para rangos moderados de \(T\), el exponente se mantiene próximo al valor teórico, mientras que las variaciones de \(b_0\) reflejan cambios en el área efectiva y la emisividad. Así, el modelo
+
+\[
+I = e^{b_0} T^{b_1} + \epsilon'
+\]
+
+Es consistente con la ley clásica de Stefan–Boltzmann, ademas ofrece una perspectiva estadística efectiva para el análisis de datos de transferencia de calor radiactivo. 
+
+Por otro lado para el experimento sobre el cero absoluto, de \citet{physicsTextbook} sabemos que, para una masa fija de un gas ideal confinada a volumen constante, la presión \(P\) es directamente proporcional a la temperatura absoluta \(T\):
+
+\[
+P = \frac{nR}{V}\,T,
+\]
+
+donde \(n\) es el número de moles, \(R\) la constante de los gases y \(V\) el volumen fijo. En la práctica, para incorporar la variabilidad experimental, se plantea el modelo de regresión lineal
+
+\[
+P_i = b_0 + b_1\,T_i + \epsilon_i,
+\]
+
+con \(\epsilon_i \sim N(0,\sigma^2)\). La teoría del gas ideal predice que \(b_0 = 0\) (cero presión a \(T=0\)$\cdot K$) y \(b_1 = nR/V\).
+
+Dado que \(b_0\) representa la ordenada al origen cuando \(T=0\), construir un intervalo de confianza de \((1-\alpha)\). Estudios experimentales como \citet{jones2004determination} se a medido presiones a distintas temperaturas, ajustado el modelo \(P_i = b_0 + b_1T_i + \epsilon_i\) mediante mínimos cuadrados ordinarios y reportado el intervalo de confianza para \(b_0\).  En la mayoría de estos casos el intervalo incluye el valor cero, y la estimación de la pendiente \(\hat b_1\) permite además calcular \(nR/V\) de forma independiente.  La concordancia entre la ordenada extrapolada y la presión nula garantiza una confirmación estadística del concepto de cero absoluto según la ley de los gases ideales.
+
+
+\section{Introducción}
+\label{sec:INTRODUCCION}
+
+\subsection{Planteamiento del Problema}
+\label{sec:PLANTAMIENTO-PROBLEMA}
+
+En el primer experimento, queremos determinar si existe una relación entre la potencia cuarta de la temperatura absoluta de un cuerpo y la potencia de calor irradiada del mismo cuerpo. En el segundo experimento queremos determinar si la presión y temperatura de un gas tienen una relación lineal independientemente del tipo de gas que se trate. 
+
+\subsection{Supuestos de la Investigación}
+\label{sec:SUPUESTOS}
+
+\begin{supuestos}
+  \item \label{su:uno} Se supone que la simulación reproduce de manera exacta el comportamiento real de la radiación térmica. 
+  \item \label{su:dos} Se asume que el cuerpo de la simulación es un cuerpo negro ideal con emisividad ($e = 1$).
+  \item \label{su:tres} El gas de la simulación se comporta de manera ideal. 
+  \item \label{su:cuatro} El volumen del gas permanece constante durante todo el experimento.
+\end{supuestos}
+
+\section{Hipótesis y Objetivos}
+\label{sec:HIPOTESIS-OBJECTIVOS}
+
+\subsection{Hipótesis}
+\label{sec:HIPOTESIS}
+
+
+\begin{hipotesis}
+  {Usando una simulación de un cuerpo negro con emisividad en 1, se puede determinar la constante de Stefan-bolzmann mediante un modelo de potencia.}
+  {$\beta_0 = 5.67 \times 10^{-8}$} %hipotesis nula
+  {$\beta_0 \neq 5.67 \times 10^{-8}$}    %hipotesis alternativa
+  {Intensidad = $e^{\beta_0}$Temperatura$^{\beta_1}  + \epsilon$} %Model
+  {\begin{itemize}
+      \item $\epsilon_1,\cdots, \epsilon_n \sim N(0,\sigma^2)$
+    \end{itemize}}
+\end{hipotesis}
+
+\begin{hipotesis}
+  {Usando una simulación de gases, se puede determinar el cero absoluto mediante un modelo lineal simple entre la presión y la temperatura; donde el intercepto se estima en 0.}
+  {$\beta_0 = 0$} %hipotesis nula
+  {$\beta_0 \neq 0$}    %hipotesis alternativa
+  {Presión = $\beta_0$ + ${\beta_1}$Temperatura $ + \epsilon$ } %Model
+  {\begin{itemize}
+      \item $\epsilon_1,\cdots, \epsilon_n \sim N(0,\sigma^2)$
+    \end{itemize}}
+\end{hipotesis}
+
+\subsection{Objetivos}
+\label{sec:OBJECTIVOS}
+
+\begin{objectives}
+  \item \label{obj:A} Estimar el valor de la constante de Stefan-Boltzmann a partir de datos experimentales de la simulación de Blackbody Spectrum de PhET.
+  \item \label{obj:B} Confirmar la relación de potencia cuarta entre temperatura e intensidad en un cuerpo negro.
+  \item \label{obj:C} Comprobar si existe una relación lineal entre la presión y la temperatura de un gas sin importar el tipo de partículas utilizadas. 
+  \item \label{obj:D} Utilizar la extrapolación de los datos experimentales para calcular el valor estimado del cero absoluto.  
+\end{objectives}
+
+
+
+\section{Metodología}
+\label{sec:METODOLOGIA}
+
+\subsection{Presentación de Montaje}
+\label{sec:MONTAJE}
+
+\begin{FigureLab}{Simulador Transferencia de Calor por Radiación}{https://phet.colorado.edu/sims/html/blackbody-spectrum}{fig:Montaje 2}
+      \includegraphics[width=0.5\linewidth]{images/practica_8/sistemamontadodensidad.png}
+\end{FigureLab}
+
+\begin{FigureLab}{Simulador Medición Cero Absoluto}{https://phet.colorado.edu/en/simulations/gas-properties}{fig:Montaje 1}
+      \includegraphics[width=0.5\linewidth]{images/practica_8/sistemamontadoparticulas.jpg}
+\end{FigureLab}
+
+
+
+%En el texto: Como se muestra en la \cref{fig:Montaje 1}, \FigRef{fig:Montaje 1} 
+
+
+\subsection{Materiales}
+\label{sec:MATERIALES}
+
+\begin{TableLab}{Tabla de Materiales}{}{tab:Materiales}
+    \rowcolors{2}{gray!10}{white}
+    \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+    \begin{tabularx}{\textwidth}{@{} l l >{\hsize=0.6\hsize}Y  >{\raggedright\arraybackslash}X @{}}
+        \toprule
+        \rowcolor{lightOrange}
+        \textbf{Material} & \textbf{Cantidad} & \textbf{Especificación} \\
+        \midrule
+        Computadora & 1 & Para usar el simulador. \\
+        Excel & n/a & Para llenar los datos. \\
+        Simulador Phet & n/a & simulador para experimental el Blackbody Spectrum y las propiedades de gas. \\
+        \bottomrule
+    \end{tabularx}
+\end{TableLab}
+
+%\cref{tab:Materiales} or \TabRef{tab:Materiales}
+
+
+\subsection{Metodos}
+\label{sec:METODOS}
+
+\begin{metodologiaLab}{Transferencia de calor por radiación}
+{\begin{enumerate}
+    \item Ingresar a la simulación Blackbody spectrum de PhET. 
+    \item Seleccionar la opción de mostrar la intensidad con dimensionales $Wm^{-2}$.
+    \item Cambiar la temperatura y observar los cambios en la intensidad de la radiación emitida. 
+    \item Registrar al menos 15 valores de temperatura e intensidad en todo el rango de temperatura.  
+    \item Graficar la temperatura absoluta contra la intensidad para después aplicar una regresión potencial.  
+    \item Grafica $T^4$ contra la intensidad para encontrar la constante de Stefan-Boltzmann y calcular la incertidumbre. 
+    \item Determinar el porcentaje de error. 
+\end{enumerate}}   
+\end{metodologiaLab}
+
+
+\begin{metodologiaLab}{Medición del cero absoluto}
+{\begin{enumerate}
+    \item Ingresar a la simulación Gas Properties de PhET.
+    \item Seleccionar “ideal” como topo de gas y seleccionar el volumen como constante.
+    \item Añadir 50 partículas ligeras y medir la presión y temperatura inicial. 
+    \item Calentar el gas por intervalos de 5 segundos y registrar la presión y temperatura en cada una de las etapas.
+    \item Repetir el procedimiento para 100 partículas ligeras, 200 partículas pesadas y 100 partículas ligeras con 100 partículas pesadas.
+    \item Graficar la presión contra la temperatura en cada uno de los conjuntos de datos y aplicar regresión lineal encontrando la ecuación de la recta y extrapolar para hallar el valor del 0 absoluto.  
+\end{enumerate}}
+\end{metodologiaLab}
+
+
+%\section{Ecuaciones}
+%\label{sec:ECUACIONES}
+
+
+%Example of an equation
+%\begin{EquationLab}
+%{}
+%{\begin{itemize}[label=$\circ$, left=0pt]
+%    \item 
+%\end{itemize}}
+%\end{EquationLab}
+
+
+%\cref{eq:1}
+
+\section{Datos}
+\label{sec:DATOS}
+
+
+\begin{itemize}[label=$\rightarrow$, left=0pt]
+  \item La constante de Stefan-Boltzmann: 4 $W\cdot m^{-2}$ \hfill(\cite{physicsTextbook})
+  \end{itemize}
+
+
+\section{Análisis}
+\label{sec:ANALISIS}
+
+%\subsection{Cálculos}
+%\label{sec:CALCULOS}
+
+%\begin{calculoLab}
+%    {}
+%    {\cref{eq:1}}
+%    {
+%     \begin{array}{rcl}
+%    \end{array}}
+%\end{calculoLab}
+
+
+
+
+\subsection{Resultados}
+\label{sec:RESULTADOS}
+
+\subsubsection*{Experimento A: Calor por Radiación}
+
+%Example of a table:
+\begin{TableLab}{Resultados Para Experimento A Calor Por Radiación}{}{}
+    \rowcolors{2}{gray!10}{white}
+    \begin{tabular}{S[table-format=4] S[table-format=9]}
+      \toprule
+      {T (\si{\kelvin})} & {Intensidad (\si{\watt\per\metre\squared})} \\
+      \midrule
+      500   &     3 540      \\
+      1000  &    56 700      \\
+      1500  &   287 000      \\
+      2000  &   907 000      \\
+      2500  & 2 220 000      \\
+      3000  & 4 590 000      \\
+      3500  & 8 510 000      \\
+      4000  &14 500 000      \\
+      4500  &23 300 000      \\
+      5000  &35 400 000      \\
+      5500  &51 900 000      \\
+      6000  &73 500 000      \\
+      6500  &101 000 000     \\
+      7000  &136 000 000     \\
+      7500  &179 000 000     \\
+      \bottomrule
+    \end{tabular}
+\end{TableLab}
+\begin{TableLab}{Resultados del Modelo Lineal plantado para el Calor por Radiación}{\Rcode}{}
+
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Variable Dependiente}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & Intensidad ($W m^{-2}$) \\ 
+\hline \\[-1.8ex] 
+ Temperatura ($K$) & 3.999$^{***}$ \\ 
+  & (0.0005) \\ 
+ Constante & 5.680e-08$^{***}$ \\ 
+  & (0.004) \\ 
+\hline \\[-1.8ex] 
+Muestra & 15 \\ 
+R$^{2}$ & 1.000 \\  
+Error típico & 0.001 (df = 13) \\ 
+Estadístico F & 78,984,918.000$^{***}$ (df = 1; 13) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\hline \\[-1.8ex]
+\end{tabular}
+\begin{tabular}[t]{llrrc}
+\toprule
+Supuesto & Prueba & Estadístico & Valor-P & Veredicto\\
+\midrule
+\cellcolor{gray!10}{Normalidad} & \cellcolor{gray!10}{Shapiro–Wilk W} & \cellcolor{gray!10}{0.915} & \cellcolor{gray!10}{0.161} & \cellcolor{gray!10}{PASS}\\
+Homoscedasticity & Breusch–Pagan $\chi^2$ & 0.259 & 0.611 & PASS\\
+\cellcolor{gray!10}{Indepenendencia} & \cellcolor{gray!10}{Durbin–Watson D} & \cellcolor{gray!10}{2.167} & \cellcolor{gray!10}{0.513} & \cellcolor{gray!10}{PASS}\\
+\bottomrule
+\end{tabular}
+\end{TableLab}
+
+\begin{FigureLab}{Intensidad vs Temperatura para el Calor por Radiación}{\Rcode}{}
+    \includegraphics[width=0.5\linewidth]{images/practica_8/intensidad_temperatura.png}
+\end{FigureLab}
+
+
+\subsubsection*{Experimento B: Cero Absoluto}
+
+\begin{TableLab}{Resultados Para Experimento B sobre Medición del Cero Absoluto}{}{}
+  \begin{tabular}{ 
+      l                         % Level
+      l                         % Variable name
+      S[table-format=4.0]       % 50 partículas
+      S[table-format=4.0]       % 100 partículas
+      S[table-format=4.0]       % 200 partículas
+      S[table-format=4.0]       % Livianas & pesadas
+    }
+    \toprule
+    Fase   & Variable                & {50 partículas} 
+                              & {100 partículas} 
+                              & {200 partículas} 
+                              & {Livianas \& pesadas} \\
+    \midrule
+    \multirow{2}{*}{1}   & Temperatura (K)         & 300          
+                              & 302            
+                              & 300            
+                              & 300            \\
+                              & Presión (Pa)            & 6.2822e+02    
+                              & 1.1845e+03     
+                              & 2.3755e+03     
+                              & 2.3675e+03     \\
+    \addlinespace
+    \multirow{2}{*}{2}   & Temperatura (K)         & 516          
+                              & 507            
+                              & 500            
+                              & 500            \\
+                              & Presión (Pa)            & 1.0538e+03    
+                              & 2.0160e+03     
+                              & 3.9390e+03     
+                              & 3.9365e+03     \\
+    \addlinespace
+    \multirow{2}{*}{3}   & Temperatura (K)         & 708          
+                              & 701            
+                              & 700            
+                              & 700            \\
+                              & Presión (Pa)            & 1.4489e+03    
+                              & 2.7760e+03     
+                              & 5.5230e+03     
+                              & 5.5240e+03     \\
+    \addlinespace
+    \multirow{2}{*}{4}   & Temperatura (K)         & 912          
+                              & 904            
+                              & 900            
+                              & 900            \\
+                              & Presión (Pa)            & 1.8234e+03    
+                              & 3.5530e+03     
+                              & 7.1030e+03     
+                              & 7.0930e+03     \\
+    \bottomrule
+  \end{tabular}
+\end{TableLab}
+
+\begin{TableLab}{Resultados del Modelo Lineal plantado para el Cero Absoluto}{\Rcode}{}
+    \begin{tabular}{@{\extracolsep{5pt}}lcccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{4}{c}{\textit{Variable Dependiente:}} \\ 
+\cline{2-5} 
+\\[-1.8ex] & Presión ($Pa$) & Presión ($Pa$) & Presión ($Pa$) & Presión ($Pa$) \\ 
+\\[-1.8ex] & 50 partículas & 100 partículas & 200 partículas & Livianas y Pesadas\\ 
+\hline \\[-1.8ex] 
+ Temperatura ($K$) & 1.971e-03$^{***}$ & 3.933e-03$^{***}$  & 7.883e-03$^{***}$ & 7.882e-03$^{***}$ \\ 
+  & (9.762e-06) & (3.703e-05) & (1.566e-05) & (1.308e-05) \\ 
+  & & & & \\ 
+ Constante & $-$7.442e-04 & $-$8.860e-03 & $-$5.175e-03 & $-$1.050e-03 \\ 
+  & (6.344e-03) & (2.383e-02) & (1.003e-02) & (8.376e-03) \\ 
+\hline \\[-1.8ex] 
+$R^2$ & 1.000 & 1.000 & 1.000 & 1.000 \\ 
+Observaciones & 4 & 4 & 4 & 4 \\  
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular}
+
+\begin{tabular}[t]{lcccc}
+\toprule
+Estadístico & 50 & 100 & 200 & Liv. y Pes.\\
+\midrule
+Shapiro–Wilk W & 0.869 (p=0.294)  & 0.791 (p=0.088)  & 0.94 (p=0.654)  & 0.993 (p=0.97) \\
+Breusch–Pagan $\chi^2$ & 1.701 (p=0.192)  & 0.779 (p=0.377)  & 1.373 (p=0.241)  & 0 (p=1) \\
+Durbin–Watson D & 2.055 (p=0.127)  & 2.011 (p=0.055)  & 2.429 (p=0.373)  & 3.401 (p=1) \\
+\bottomrule
+\end{tabular}
+\end{TableLab}
+
+\begin{FigureLab}{Temperatura vs Presión para el Cero Absoluto}{\Rcode}{}
+    \includegraphics[width=0.9\linewidth]{images/practica_8/particles.png}
+\end{FigureLab}
+
+\subsubsection*{Resultados para las Hipótesis}
+
+\begin{TableLab}{Veredicto ante \cref{hyp:A} con un nivel de 99\% de confianza}{}{}
+  % locally override siunitx just for this table:
+  {\sisetup{
+      scientific-notation   = engineering,  % force exponent form
+      exponent-product       = {},          % drop “×10”
+      output-exponent-marker = e,           % use “e” not “E” or “×10^”
+    }}
+
+  \begin{tabular}{%
+      @{}>{\raggedright\arraybackslash}p{3cm}  % col 1
+      |l                                       % col 2 (text)
+      S[table-format=1.2e2]                   % col 3: 1 digit before, 2 after, 2-digit exponent
+      S[table-format=1.1e2]                   % col 4: 1 digit before, 1 after, 2-digit exponent
+      S[table-format=1.1e2]                   % col 5: same as col 4
+      S[round-mode=places, round-precision=6] % col 6: fixed with 6 decimals
+      @{}}
+    \toprule
+    Evidencia en contra de {$H_0$}
+      & \textbf{$\hat{\beta}_1$}
+      & {Límite Inf.}
+      & {Límite Sup.}
+      & {valor-P} \\
+    \midrule
+    FALSO en 1\%
+      & 5.68e-08
+      & 5.6e-08
+      & 5.7e-08
+      & 0.326700 \\
+    \bottomrule
+  \end{tabular}
+\end{TableLab}
+
+
+\begin{TableLab}{Veredicto ante \cref{hyp:B} con un nivel de 99\% de confianza}{}{}
+  \begin{tabular}{%
+      @{}p{3cm}|l
+      S[table-format=1.4]
+      S[table-format=1.4]
+      S[table-format=1.4]@{}
+    }
+    \toprule
+    Evidencia en contra de {$H_0$}
+      & \textbf{Partículas}
+      & {limite inferior} 
+      & {limite superior} 
+      & {valor-P} \\
+    %Vertical Line
+      
+    \midrule
+    FALSO en 1\%   & 50           & -0.6370 &  0.0622 & 0.9173 \\
+    FALSO en 1\%   & 100          & -0.2277 &  0.2454 & 0.7457 \\
+    FALSO en 1\%   & 200          & -0.0943 &  0.1046 & 0.6571 \\
+    FALSO en 1\%   & Livianas \& Pesadas 
+                    & -0.0820 &  0.08418 & 0.9117 \\
+    \bottomrule
+  \end{tabular}
+\end{TableLab}
+
+
+
+\section{Discusión de Resultados}
+\label{sec:DISCUSSION}
+    
+\indent Los\secref{sec:OBJECTIVOS} de este experimento era estimar el valor de la constante de Stefan-Bolzmann (\hyperref[obj:A]{objetivo A}); confirmar la relación de potencia entre temperatura e intensidad de un cuerpo negro (\hyperref[obj:B]{objetivo B}); ademas, comprobar si existe una relación lineal entre la presión y la temperatura de un gas (\hyperref[obj:C]{objetivo C}); y por ultimo estimar el cero absoluto (\hyperref[obj:D]{objetivo D}). Como se tiene en los \secref{sec:SUPUESTOS}, se tiene que la simulaciones se comportan de manera ideal (\cref{su:uno},\cref{su:dos}); ademas, se asume que el cuerpo negro ideal con emisividad en uno (\cref{su:dos}); y que el volumen del gas permanece constante durante todo el simulador (\cref{su:cuatro}).\newline 
+
+\indent Para esta practica se incluye dos hipótesis una para cada simulador, para el experimento sobre calor por radiación, se tiene que la \cref{hyp:A} sugiere que la intersección de la función plantada se estima al valor teórico de la constante de Stefan-Bolzmann, usando un intervalo de confianza del 99\%; por el otro lado para el experimento cero absoluto, \cref{hyp:B} se estima que el intercepto de la función esta evaluada en cero, usando un intervalo de confianza del 99\%. En la \cref{tab:VI} demuestra el intervalo de confianza para la \cref{hyp:A}, donde se tiene un 99\% nivel de confianza que no hay evidencia en contra la hipótesis nula, por lo cual la intersección de la función plantada en la \cref{hyp:A} se puede inferir que tiene el mismo valor numérico a la constante de Stefan-Bolzmann (\cite{physicsTextbook}). Por el otro lado \cref{tab:VII} da evidencia usando un intervalo de confianza del 99\%, que para las partículas de 50, 100, 200, y livianas e pesadas, no hay suficiente evidencia para rechazar la hipótesis nula, implicando que en todo los cuatro casos se pudo evaluar el valor absoluto para el intercepto de la función definida en la \cref{hyp:B}.\newline
+
+Con más detalle sobre los resultados del experimento relativo al calor por radiación, primero observe que los resultados del Modelo Potencial se pueden encontrar en \cref{tab:III}; aquí usamos los datos simulados (\cref{fig:Montaje 2}) que están tabulados en \cref{tab:II}. Como era de esperarse, la ecuación física presentada por \citet{physicsTextbook} tiene los mismos valores paramétricos que el modelo ajustado, lo que indica que el \hyperref[obj:A]{objetivo A} se cumple. Además, los errores estándar de ambos parámetros son extremadamente pequeños; esto puede apreciarse en \cref{fig:3}, donde incluso al graficar la Intensidad frente a la Temperatura los errores fueron tan mínimos que no son visibles gráficamente. Esto también se respalda en el hecho de que el coeficiente de determinación es aproximadamente uno, lo que sugiere que la Temperatura explica completamente la Intensidad. Finalmente, como se muestra en la última subtabla de \cref{tab:III}, todas las suposiciones respecto a los residuos se satisfacen, lo cual indica que los parámetros estimados del modelo son insesgados y no generan errores no contabilizados en las pruebas de inferencia. En general, los resultados indican con fuerza que el \hyperref[obj:B]{objetivo B} también se cumple. \newline
+
+Por otro lado, para el segundo experimento relativo al cero absoluto, los resultados simulados de \cref{fig:Montaje 1} fueron tabulados en \cref{tab:IV}. Primero observe que tenemos cuatro poblaciones diferentes, cada una correspondiente al número o tipo de partícula durante la simulación; en las primeras tres columnas todas son partículas ligeras. En segundo lugar, se tuvo que usar la unidad de Pascal para la presión porque el kilo-Pascal resultó en valores infinitesimales que causaron aproximaciones inexactas. El modelo lineal simple ajustado para cada una de las cuatro poblaciones observadas se presenta en \cref{tab:V}. \newline
+
+Inmediatamente, queda claro que las cuatro poblaciones tienen un coeficiente de determinación aproximadamente igual a uno, lo que sugiere que en cada modelo la Temperatura explica perfectamente la Presión; esto se refuerza por el hecho de que los errores estándar de cada coeficiente son infinitesimales, a pesar de que cada modelo solo contó con cuatro grados de libertad. Para una representación visual, puede consultar estos resultados en \cref{fig:4}, que muestra la gráfica de Temperatura versus Presión para cada población. Curiosamente, la gráfica correspondiente a las 100 partículas es la que mostró mayor desviación en los errores estándar, representada por un azul más grueso, aunque, como se sugirió antes, ninguno de los modelos experimentó un error estándar significativo. Un detalle que puede observarse en \cref{tab:V} y que inicialmente resulta desconcertante es que la Constante o Intercepto de los cuatro modelos no tiene ninguna significancia con respecto a la Presión (representado por el número de asteriscos); sin embargo, recuerde que la prueba de significancia individual es la misma que en nuestra \cref{hyp:B}, por lo que esto no es un error de cálculo del modelo estadístico especificado. Por lo tanto, el modelo estadístico es consistente, satisfaciendo el \hyperref[obj:C]{objetivo C} y el \hyperref[obj:D]{objetivo D}.\newline
+
+En retrospectiva con la fisica se puede llegar a evaluar de que este análisis conecta directamente con principios clave de la física termodinámica y de los gases: al estimar con un 99\% de confianza la constante de Stefan–Boltzmann y comprobar que la intensidad radiada sigue la ley de potencia \(I \propto T^4\), estamos validando experimentalmente la ley de Stefan–Boltzmann para un cuerpo negro ideal \cite{physicsTextbook}; del mismo modo, al ajustar un modelo lineal de presión versus temperatura y demostrar que el intercepto tiende a cero, confirmamos la ley de los gases ideales y la existencia del cero absoluto, punto en el cual la presión de un gas ideal se anula \cite{physicsTextbook}. La elevada determinación (\(R^2 \approx 1\)) y los mínimos errores estándar respaldan tanto la precisión de las simulaciones ideales como la solidez estadística de los métodos empleados, lo que refuerza la coherencia entre los resultados obtenidos y la teoría física clásica.  
+
+
+%Como se ve en la \cref{tab:II},
+
+
+%\cref{hyp:A}
+%\hyperref[obj:A]{Objetivo A}
+
+%for apa7 reference use: \parencite{smith2019study}  (author, date)
+%to use in text citation use: \textcite{garcia2020efecto}. author (date)
+
+%To reference an objective do~\hyperref[obj:A]{Objetivo A}
+%To reference a equation do~\autoref{eq:equationLabel} 
+
+%To reference a table use ~\autoref{tab:TableNO} this prints the label and a hyperlink to that table
+
+
+%To reference a figure use ~\autoref{fig:figNo} this prints the figure number and the hyperlink
+\section{Conclusiones}
+\label{sec:CONCLUSIONES}
+
+\begin{itemize}
+    \item Mediante un modelo estadistico se  estimo la constante de Stefan-Boltzmann con 99\% nivel de confianza, obteniéndose un valor muy cercano al teórico ($5.68\times 10^{-8} W\cdot m^{-2} \cdot K^{-4}$) lo cual valida la hipótesis de que un cuerpo negro ideal (emisividad = 1) puede ser simulado adecuadamente para propósitos experimentales mediante herramientas virtuales como el simulador de PhET. 
+    \item En el segundo experimento los modelos lineales son consistentes con los datos observados, lo que confirma una relación lineal entre presión y temperatura a volumen constante. Estos resultados respaldan la ley de los gases ideales e indican que esta relación se mantiene sin importar el tipo o cantidad de partículas. 
+    \item La extrapolación de los modelos lineales permitió estimar el valor del cero absoluto con 99\% nivdel de confianza, justificando que la temperatura en promedio de un gas tiende a cero. 
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\footnotesize
+\printbibliography
+\normalsize
+
+\section*{Anexo}
+\label{sec:Anexo}
+
+Nota:
+
+Las capturas de pantalla de cada resultado se pueden encontrar en el drive para esta practica en el siguiente link:
+
+\href{https://uvggt-my.sharepoint.com/:f:/g/personal/ram23062_uvg_edu_gt/EsZGHnD-QNxInH9tE-_vLxMBFMls6SJ-wshJfEF_8PD1Sw?e=mRbjYx}{Hyperlink para carpeta con las imágenes de los resultados de las simulaciones}
+
+
+%\begin{FigureAnexo}{}{}{}
+%\end{FigureAnexo}
+%\cref{Afig:1}
+
+
+\end{document}
+ 

@@ -1,0 +1,63 @@
+\ProvidesPackage{design/layout_default}
+
+\makeatletter
+
+% ---------- Title formatting ----------
+\renewcommand{\@maketitle}{%
+ \thispagestyle{plain}
+ \begin{flushleft}
+  {\fontsize{14}{14}\selectfont \@title \par}
+  \vspace{12pt}
+  {\@author \par}
+  {\def\and{\\\vspace{14pt}} \normalfont\@info \par}
+ \end{flushleft}
+ \vspace{5pt}
+ \noindent {\em Palabras Clave:\space}{\@abstract}
+ \par
+ \vspace{42pt}
+}
+
+% ---------- Section styles ----------
+\renewcommand{\section}{%
+  \@startsection{section}{1}{6mm}{12pt}{1pt}{\normalsize\bfseries}
+}
+
+\renewcommand{\subsection}{%
+  \@startsection{subsection}{2}{6mm}{12pt}{1pt}{\normalfont\itshape}
+}
+
+% ---------- Caption style ----------
+\renewcommand{\@makecaption}[2]{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{\normalsize\fontsize{10}{12}\selectfont #1: #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    \normalsize\fontsize{10}{12}\selectfont #1: #2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip
+}
+
+% ---------- Page layout ----------
+\setlength{\oddsidemargin}{-5mm}
+\setlength{\evensidemargin}{-5mm}
+\setlength{\topmargin}{-10mm}
+\setlength{\headheight}{24.6mm}
+\setlength{\headsep}{10pt}
+\setlength{\textheight}{250mm}
+\setlength{\textwidth}{165mm}
+
+% ---------- Spacing ----------
+\setlength{\textfloatsep}{12pt}
+\setlength{\abovedisplayskip}{6pt}
+\setlength{\belowdisplayskip}{6pt}
+\setlength{\parindent}{5mm}
+\setlength{\abovecaptionskip}{6pt}
+\setlength{\belowcaptionskip}{6pt}
+\setlength{\itemsep}{0pt}
+
+% ---------- Page style ----------
+\pagestyle{plain}
+
+\makeatother

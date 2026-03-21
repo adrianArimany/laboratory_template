@@ -1,0 +1,407 @@
+
+\documentclass[12pt,a4paper]{config/myConfig}
+\usepackage{silence}
+\WarningFilter{latex}{You have requested}
+\usepackage{config/myDependencies}
+\usepackage{style/myEnv}
+\usepackage{style/myCommands}
+\usepackage{style/myColors}
+
+\addbibresource{bibliography.bib}  % your .bib file
+
+%Number of the practica for this assigment:
+\newcommand{\AssigmentNumber}{Practica 7}
+\newcommand{\AssigmentDate}{4 Mayo del 2025}
+%------------------
+%If any computer language used:
+\newcommand{\Rcode}{R - version 3.4.4}
+%----------------------
+%Palabras Clave para el informe:
+\newcommand{\PalabrasClave}{\small \it
+Calor Especifico,$\ $Calorímetro,$\ $ Sistema Cerrado
+}
+
+\title{\Large $\ $\\ \bf Identificación de objectos metálicos usando el Calor Especifico}
+
+\author
+\info
+
+\abstract{\PalabrasClave
+\normalsize
+\\[17pt]
+{\bf Abstract.} En este experimento se determinó el calor específico de diferentes aleaciones metálicas mediante una calorimetría para su posterior identificación. Se utilizó un sistema PASCO Capstone con sensor de temperatura y un calorímetro aislado térmicamente para medir la transferencia de calor entre metales a baja temperatura y agua. Los resultados mostraron valores experimentales de \SI{712.18}{J/kg, ^\circ C} para el aluminio (error relativo de 21.74 \%), \SI{109.20}{J/kg, ^\circ C} para el plomo (error relativo de 16.00 \%) y \SI{152.55}{J/kg, ^\circ C} para el cobre (error relativo de 59.85\%). Las discrepancias respecto a los valores teóricos (\SI{910}{J/kg, ^\circ C}, \SI{130}{J/kg, ^\circ C} y \SI{380}{J/kg, ^\circ C} respectivamente) se atribuyen principalmente a pérdidas térmicas durante la manipulación de las muestras y el tiempo de transferencia entre sistemas. El estudio confirma la viabilidad de la calorímetro como método de identificación de metales, aunque se requieren mejoras en el aislamiento térmico y la técnica de manipulación para reducir las fuentes de error identificadas.}
+
+\sisetup{
+  separate-uncertainty = true,
+  table-number-alignment = center,
+  detect-weight = true,
+  detect-family = true
+}
+
+\begin{document}
+\thispagestyle{myheadings}
+\pagestyle{myheadings}
+\markright{\tt \AssigmentNumber|    \AssigmentDate}%check the date
+
+
+
+\section{Marco Conceptual}
+\label{sec:MARCO-CONCEPTUAL}
+
+\subsection{Antecedentes}
+\label{sec:ANTECEDENTES}
+
+La identificación de materiales a partir de sus propiedades térmicas es una herramienta fundamental en la física experimental. Entre estas propiedades, el calor específico destaca por su capacidad de caracterizar cómo responde una sustancia al intercambio de energía térmica. Este parámetro ha sido objeto de múltiples investigaciones, ya que permite comprender la relación entre masa, temperatura y energía en sistemas físicos cerrados.
+
+La calorimetría es un método experimental utilizado para determinar el calor específico de una sustancia, basado en la medición de la energía transferida como calor entre cuerpos que se encuentran a diferentes temperaturas. El modelo teórico que sustenta esta práctica es la ecuación:
+
+\begin{equation}
+Q = mc\Delta T
+\end{equation}
+
+donde $Q$ representa la energía térmica transferida, $m$ la masa del objeto, $c$ el calor específico y $\Delta T$ el cambio de temperatura. En un sistema térmicamente aislado, como el configurado en esta práctica, la energía se conserva, cumpliéndose que:
+
+\begin{equation}
+Q_{ganado} = -Q_{perdido}
+\end{equation}
+
+Este principio permite calcular el calor específico de un metal desconocido al sumergirlo en agua, registrando las temperaturas iniciales y finales del sistema. La exactitud del procedimiento depende tanto del aislamiento térmico del calorímetro como del control en la transferencia del objeto. \textcite{physicsTextbook}.
+
+\section{Introducción}
+\label{sec:INTRODUCCION}
+
+\subsection{Planteamiento del Problema}
+\label{sec:PLANTAMIENTO-PROBLEMA}
+
+Para este experimento se tiene que determinar el calor especifico para tres metales (Aluminio, Cobre, y Plomo), evaluando respectivamente sus incertidumbres. Esto se cumplió a lo largo de un experimento de calorímetro, donde se estudiaron los metales en un recipiente encapsulado donde adentro había agua que cambiaba de temperatura cada cierto tiempo. Y después de recolectar los resultados, mediante el error relativo evaluar el porcentaje que el calor especifico experimental se desvía de calor especifico teórico encontrado en  \textcite{physicsTextbook}.  
+
+\subsection{Supuestos de la Investigación}
+\label{sec:SUPUESTOS}
+
+\begin{supuestos}
+  \item \label{su:uno} Los objectos metálicos se encuentran en un sistema cerrado.
+  \item \label{su:dos} El calor se distribuye uniformemente.
+\end{supuestos}
+
+\section{Hipótesis y Objetivos}
+\label{sec:HIPOTESIS-OBJECTIVOS}
+
+\subsection{Hipótesis}
+\label{sec:HIPOTESIS}
+
+
+\begin{hipotesis}
+  {El calor especifico para el aluminio, cobre, y plomo se pueden estudiar mediante la calorímetro, donde el error relativo ($\epsilon_r$) entre el calor especifico experimental ($\Cexp$) es menor del 25\% al calor especifico teórico ($\Cteo$).}
+  {\Large$\epsilon_r$\normalsize$(\Cexp,\Cteo) \geq 25\%$} %hipotesis nula
+  {\Large$\epsilon_r$\normalsize$(\Cexp,\Cteo) < 25\%$} %hipotesis alternativa
+  {}
+  {}
+\end{hipotesis}
+
+
+\subsection{Objetivos}
+\label{sec:OBJECTIVOS}
+
+\begin{objectives}
+  \item \label{obj:A} Evaluar el calor especifico de tres distintos metales mediante el proceso del calorímetro.
+  \item \label{obj:B} Determinar las incertidumbres para cada metal estudiado mediante el proceso del calorímetro. 
+\end{objectives}
+
+
+
+\section{Metodología}
+\label{sec:METODOLOGIA}
+
+\subsection{Presentación de Montaje}
+\label{sec:MONTAJE}
+
+\begin{FigureLab}{Experimento Montado 1}{}{fig:Montaje 1}
+      \includegraphics[width=0.5\linewidth]{images/practica_7/sistemamontado.png}
+\end{FigureLab}
+
+
+%En el texto: Como se muestra en la \cref{fig:Montaje 1}, \FigRef{fig:Montaje 1} 
+
+
+\subsection{Materiales}
+\label{sec:MATERIALES}
+
+\begin{TableLab}{Tabla de Materiales}{}{tab:Materiales}
+    \rowcolors{2}{gray!10}{white}
+    \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+    \begin{tabularx}{\textwidth}{@{} l l >{\hsize=0.6\hsize}Y  >{\raggedright\arraybackslash}X @{}}
+        \toprule
+        \rowcolor{lightOrange}
+        \textbf{Material} & \textbf{Cantidad} & \textbf{Especificación} \\
+        \midrule
+        Aluminio & 1 & Con forma de cilindro pequeño. \\
+        Cobre & 1 & Con forma de cilindro pequeño. \\
+        Plomo & 1 & Con forma de Esfera pequeña. \\
+        Sensor & 2 & Sensor para medir la temperatura. \\
+        Recipiente & 2 & Recipiente hecho de con un material que sea aislante térmico, y un recipiente era mayor que el otro. \\
+        Probeta & 1 & Con un máximo de alcance de 100 mL\\
+        Balanza & 1 & mide en gramos.\\
+        Toallas de papel & 10 & Para limpiar o absorber el agua que caiga del recipiente.\\
+        Cronometro & 1 & Para medir el tiempo.\\
+        Hielo & 3 & Para hacer los cambios de transición de solido a liquido\\
+        Agua & n/a & Se uso como transmisor de calor.\\
+        Guantes & 1 & Guantes de cocina para sostener el recipiente cuando tenga una temperatura muy alta.\\
+        \bottomrule
+    \end{tabularx}
+\end{TableLab}
+
+%\cref{tab:Materiales} or \TabRef{tab:Materiales}
+
+
+\subsection{Metodos}
+\label{sec:METODOS}
+\begin{enumerate}
+    \item Determinar la masa de los objetos metálicos haciendo uso de la balanza.
+    \item Conectar a la interfaz los 2 sensores de temperatura y ponerlos en un mismo plano.
+    \item Configurar las gráficas como temperatura contra tiempo.
+    \item Añadir al recipiente 1 tres cuartos de agua y el resto de hielo, con uso de la probeta añadir 50 ml de agua al recipiente 2.
+    \item Ingresar el objeto metálico al recipiente 1, colocar los sensores en ambos recipientes e iniciar la recopilación de datos.
+    \item Esperar 5 minutos a que lleguen a un punto estable.
+    \item Al llegar al punto de máximo en la temperatura medida por ambos sensores, transferir el objeto metálico rápidamente y secarlo con guantes térmicos sin aplicar calor.
+    \item Ingresar el objeto metálico al agua del recipiente 2 y esperar hasta que la gráfica alcance la temperatura de equilibrio.
+    \item Determinar la media de las tres temperaturas: inicial del agua en ambos recipientes y final en el recipiente 2.
+    \item Repetir con el resto de objetos metálicos.
+\end{enumerate}
+
+\section{Ecuaciones}
+\label{sec:ECUACIONES}
+
+
+%Example of an equation
+\begin{EquationLab}
+{\mathbf{c}_{experimental,metal} = \frac{m_{agua}\cdot c_{agua} (T_{i, agua} - T_{eq})}{m_{metal}(T_{eq} - T_{i,metal})}}
+{\begin{itemize}[label=$\circ$, left=0pt]
+    \item $\mathbf{c}_{experimental,metal}$: Calor especifico experimental para un de los metales.
+    \item $metal$: Es un subíndice indicando si el metal es Aluminio, Cobre, o plomo.
+    \item $m_{agua}$: Es la masa del liquido  para el experimento.
+    \item $c_{agua}$: Es el calor especifico del agua
+    \item $T_{i,agua}$: Es la temperatura inicial del liquido durante el experimento.
+    \item $m_{metal}$: Es la masa del metal para el experimento.
+    \item $T_{eq}$: Es la temperatura final cual es conocida como el equilibrio de Temperatura.
+    \item $T_{i,metal}$: Es la temperatura inicial del metal.
+\end{itemize}}
+\end{EquationLab}
+
+\begin{EquationLab}
+    {\Delta\Cexp = 
+    \left(\frac{\Delta m_{agua}}{m_{agua}}\right) + 
+    \left(\frac{\Delta c_{agua}}{c_{agua}}\right) +
+    \left(\frac{\Delta 2\cdot T}{(T_{agua}-T_{eq})}\right) +
+    \left(\frac{\Delta m_{metal}}{m_{metal}}\right) +
+    \left(\frac{\Delta 2 \cdot T}{(T_{eq}-T_{metal})}\right)
+    }
+    {\begin{itemize}[label=$\circ$, left=0pt]
+        \item  $\Delta \Cexp$: incertidumbre del calor especifico del metal.
+        \item $\Delta m_{agua}$: incertidumbre de la masa del agua.
+        \item $\Delta c_{agua}$: incertidumbre del calor especifico del agua.
+        \item $\Delta T$: incertidumbre de la temperatura
+        \item $\Delta m_{metal}$: incertidumbre de la masa del metal.
+    \end{itemize}}
+\end{EquationLab}
+
+%\cref{eq:1}
+
+\section{Datos}
+\label{sec:DATOS}
+
+
+\begin{itemize}[label=$\rightarrow$, left=0pt]
+  \item Calor específico del agua: 4186 $\left(\frac{J}{kg \cdot ^\circ C}\right)$\hfill(\cite{physicsTextbook})
+  \item Calor especifico teórico del aluminio: 910 $\left(\frac{J}{kg \cdot ^\circ C}\right)$\hfill(\cite{physicsTextbook})
+  \item Calor especifico teórico del Cobre: 380 $\left(\frac{J}{kg \cdot ^\circ C}\right)$\hfill(\cite{physicsTextbook})
+  \item Calor especifico teórico del Cobre: 130 $\left(\frac{J}{kg \cdot ^\circ C}\right)$\hfill(\cite{physicsTextbook})
+\end{itemize}
+
+
+\section{Análisis}
+\label{sec:RESULTADOS}
+
+\subsection{Cálculos}
+\label{sec:CALCULOS}
+
+\begin{calculoLab}
+    {Calor Especifico Experimental para el Aluminio}
+    {\cref{eq:1}}
+    {
+     \begin{array}{rcl}
+        \mathbf{c}_{experimental, aluminio} & = & \frac{0.0500 kg \cdot 4186 \left(\frac{J}{kg \cdot ^\circ C}\right) (25.7-16.4 (^\circ C))}{0.1995 (kg) (16.4 - 2.7 (^\circ C))} \\
+         & = & \frac{1946.49 J}{2.73315 kg \cdot ^\circ C} \\
+         & = & 712.18 \left(\frac{J}{kg \cdot ^\circ C}\right)\\
+    \end{array}}
+\end{calculoLab}
+
+\begin{calculoLab}
+    {Incertidumbre para el Calor Especifico del Aluminio}
+    {\cref{eq:2}}
+    {\begin{array}{rcl}
+        \Delta \mathbf{c}_{aluminio} & = & \left(\frac{0.00005}{0.0500}\right) + 
+    \left(\frac{0}{4186}\right) +
+    \left(\frac{2(0.5-0.5)}{(25.7-16.4)}\right) +
+    \left(\frac{0.0005}{0.1995}\right) +
+    \left(\frac{2(0.5-0.5)}{(16.4-2.7)}\right) \\
+    & = & (0.001)+(0)+(0)+(0.0025)+(0) \\
+    & = & 0.0035
+    \end{array}}
+\end{calculoLab}
+
+\subsection{Resultados}
+\label{sec:RESULTADOS}
+
+%Example of a table:
+\begin{TableLab}{Resultados Para Cada Experimento Usando los Tres Metales}{}{}
+   \setlength{\tabcolsep}{10pt} % reduce horizontal padding
+  \rowcolors{2}{gray!12}{white}
+  \begin{tabular}{@{} >{\raggedright\arraybackslash}p{2.5cm}
+                   >{\centering\arraybackslash}p{2.5cm}
+                   >{\centering\arraybackslash}p{2.5cm}
+                   >{\centering\arraybackslash}p{2.5cm}@{}}
+    \toprule
+     & \textbf{Aluminio} 
+     & \textbf{Cobre} 
+     & \textbf{Plomo} \\
+    \midrule
+    $m_{\mathrm{agua}}$ (kg)
+      & \makecell{0.0500\\($\pm$0.00005)}
+      & \makecell{0.0500\\($\pm$0.00005)}
+      & \makecell{0.0500\\($\pm$0.00005)} \\
+
+    $m_{\mathrm{metal}}$ (kg)
+      & \makecell{0.1995\\($\pm$0.0005)}
+      & \makecell{0.1950\\($\pm$0.0005)}
+      & \makecell{0.2267\\($\pm$0.0005)} \\
+
+    $T_{i,\mathrm{agua}}$ ($^{\circ}$C)
+      & \makecell{25.7\\($\pm$0.5)}
+      & \makecell{26.8\\($\pm$0.5)}
+      & \makecell{25.0\\($\pm$0.5)} \\
+
+    $T_{i,\mathrm{metal}}$ ($^{\circ}$C)
+      & \makecell{2.7\\($\pm$0.5)}
+      & \makecell{4.3\\($\pm$0.5)}
+      & \makecell{4.2\\($\pm$0.5)} \\
+      
+    $T_{\mathrm{eq}}$ ($^{\circ}$C)
+      & \makecell{16.4\\($\pm$0.5)}
+      & \makecell{24.0\\($\pm$0.5)}
+      & \makecell{22.8\\($\pm$0.5)} \\
+
+    $C_{\mathrm{agua}}$ ($\frac{J}{kg \cdot ^{\circ}C }$)
+      & 4186
+      & 4186
+      & 4186 \\
+
+    $C_{\mathrm{metal}}$ ($\frac{J}{kg \cdot ^{\circ}C }$)
+      & \makecell{712.18\\($\pm$0.0035)}
+      & \makecell{152.55\\($\pm$0.0036)}
+      & \makecell{109.20\\($\pm$0.0032)} \\
+    \bottomrule
+  \end{tabular}
+\end{TableLab}
+
+\footnotetext{Note que las incertidumbres de los resultados obtenidos se encuentran en la \cref{tab:II}, y están representados en paréntesis debajo de la variable estimada.}
+
+\begin{TableLab}{Resultados para los Errores Relativos}{}{}
+        \rowcolors{2}{gray!10}{white}
+  \begin{tabular}{%
+      @{}>{\raggedright\arraybackslash}p{3cm}  % columna 1
+      |                                        % vertical rule aquí
+      l                                        % columna 2: Metal
+      S[table-format=3.0]                      % columna 3: c_teo
+      S[table-format=3.2]                      % columna 4: c_exp
+      S[table-format=2.2]@{}                   % columna 5: error %
+    }
+    \toprule
+    Evidencia en contra de {$H_0$}
+      & \textbf{Metal}
+      & {$\Cteo$} 
+      & {$\Cexp$} 
+      & {\Large$\epsilon_r$\normalsize $(\Cexp,\Cteo)$} \\
+    %Vertical Line
+      
+    \midrule
+    Hay evidencia para rechazar  & Aluminio &  910   & 712.18 & 21.74\% \\
+    No hay evidencia para rechazar  & Cobre    &  380   & 152.55 & 59.85\% \\
+    Hay evidencia para rechazar  & Plomo    &  130   & 109.20 & 16.00\% \\
+    \bottomrule
+  \end{tabular}
+\end{TableLab}
+
+
+
+
+\section{Discussion de Resultados}
+\label{sec:DISCUSSION}
+    
+\indent Los\secref{sec:OBJECTIVOS} de este experimento era evaluaran el calor especifico para la aleaciones de los metales: Aluminio, Cobre, y Plomo (\hyperref[obj:A]{objetivo A}); ademas, se quera determinar las incertidumbres para cada calor especifico (\hyperref[obj:B]{objetivo B}). Como se tiene en los \secref{sec:SUPUESTOS}, se consideraron que los objetos metálicos se encuentras en un sistema cerrado (\cref{su:uno}) y el calor esta distribuido uniformemente en todo el liquido (\cref{su:dos}). Nuestra \cref{hyp:A} sugiere que no hay una diferencia considerable entre el calor especifico teórico ($\Cteo$) y el calor especifico experimental ($\Cexp$) en el error relativo ($\epsilon_r$).\newline
+
+En la \cref{tab:III} se presentan los resultados obtenidos para $\Cexp$ comparados con los valores teóricos ($\Cteo$), junto con el porcentaje del error relativo ($\epsilon_r$). Los resultados muestran que, para el Aluminio y el Plomo, se encontró suficiente evidencia para rechazar la hipótesis nula, lo que indica que no hay diferencias significativas entre $\Cexp$ y $\Cteo$. Por el otro lado Para el Cobre, no hubo suficiente evidencia para rechazar la hipótesis nula, lo que sugiere una inconsistencia entre el valor experimental y el teórico. Esto podría indicar que las condiciones experimentales para el Cobre no fueron adecuadas y que las pérdidas de calor fueron muy altas.\newline
+
+Los valores experimentales del calor específico se esperaban cercanos a los teóricos en un sistema térmicamente aislado (\cref{tab:II}). El aluminio presentó un valor experimental de 712.18 $J (kg \cdot ^\circ C)^{-1}$, con un error relativo del 21.74\%, mientras que el plomo mostró 109.20 $J (kg \cdot ^\circ C)^{-1}$, con un error de 16.00\%. En contraste, el cobre presentó un valor experimental significativamente menor de 152.55 $J (kg \cdot ^\circ C)^{-1}$ frente a su valor teórico de 380 $J (kg \cdot ^\circ C)^{-1}$, resultando en un error relativo elevado del 59.85\%. Esta discrepancia puede explicarse por la baja diferencia de temperatura entre la muestra de cobre (4.3 $^\circ C$) y el agua (26.8 $^\circ C$), lo que redujo la cantidad de energía transferida y aumentó la sensibilidad del sistema a pérdidas térmicas. \newline
+
+En especifico, la desviación observada en el Cobre podría atribuirse a varios factores experimentales. Durante el experimento, se observó que la temperatura del agua aumentaba de manera constante, lo que indica que no se alcanzó un equilibrio térmico claro, afectando la precisión del cálculo del calor específico. Adicionalmente, no se consideró la capacidad calorífica del calorímetro ni del recipiente que contenía el agua, lo que implica que parte del calor transferido pudo haber sido absorbido por estos materiales. Además, el cobre pudo haber perdido calor durante su transferencia del baño de calentamiento al calorímetro, afectando su temperatura inicial. \newline
+
+%Como se ve en la \cref{tab:II},
+
+
+%\cref{hyp:A}
+%\hyperref[obj:A]{Objetivo A}
+
+%for apa7 reference use: \parencite{smith2019study}  (author, date)
+%to use in text citation use: \textcite{garcia2020efecto}. author (date)
+
+%To reference an objective do~\hyperref[obj:A]{Objetivo A}
+%To reference a equation do~\autoref{eq:equationLabel} 
+
+%To reference a table use ~\autoref{tab:TableNO} this prints the label and a hyperlink to that table
+
+
+%To reference a figure use ~\autoref{fig:figNo} this prints the figure number and the hyperlink
+\section{Conclusiones}
+\label{sec:CONCLUSIONES}
+
+\begin{itemize}
+    \item El cobre fue el metal con mayor discrepancia respecto a su valor teórico, con un error relativo del 59.85\%, lo que se atribuye a un bajo gradiente térmico inicial, posibles pérdidas de calor al ambiente y a una manipulación poco precisa en las primeras etapas del experimento. 
+    \item El aluminio y el plomo presentaron errores relativos menores al 25\% (21.74\% y 16.00\%, respectivamente), por lo que hubo evidencia suficiente para rechazar la hipótesis nula en ambos casos, indicando una buena aproximación experimental a los valores teóricos esperados. 
+    \item La práctica evidenció que pequeñas diferencias en temperatura o manipulación pueden tener un impacto notable en los resultados, especialmente cuando la transferencia de calor es baja, como en el caso del cobre, donde la diferencia inicial de temperatura fue limitada.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\footnotesize
+\printbibliography
+\normalsize
+
+\section*{Anexo}
+\label{sec:Anexo}
+
+\begin{FigureAnexo}{Resultados del experimento del Aluminio}{}{}
+\includegraphics[width=0.8\linewidth]{images/practica_7/results_al.png}
+\end{FigureAnexo}
+%\cref{Afig:1}
+
+\begin{FigureAnexo}{Resultados del experimento del Cobre}{}{}
+\includegraphics[width=0.8\linewidth]{images/practica_7/results_cobre.png}
+\end{FigureAnexo}
+
+\begin{FigureAnexo}{Resultados del experimento del Plomo}{}{}
+\includegraphics[width=0.8\linewidth]{images/practica_7/results_plomo.png}
+\end{FigureAnexo}
+
+\end{document}
+ 

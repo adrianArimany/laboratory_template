@@ -1,0 +1,47 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{config/dependencies}[Depenedencias for latex]
+
+\RequirePackage{subfigure,graphicx}
+\RequirePackage{amsmath,amsfonts,latexsym,amssymb,euscript,xr}
+\RequirePackage{booktabs}
+\RequirePackage{pgfkeys}
+\RequirePackage[nodayofweek]{datetime}
+\RequirePackage[colorlinks]{hyperref}
+\RequirePackage[nameinlink]{cleveref}
+\RequirePackage{xstring} %to create personal hyperlinks.
+\RequirePackage{float}
+\RequirePackage[table]{xcolor}
+\RequirePackage{color,colortbl,tabularx}
+\RequirePackage{array} 
+\RequirePackage[spanish,es-nodecimaldot,es-noshorthands]{babel} %Español
+\RequirePackage[protrusion=true,expansion=true]{microtype}
+\RequirePackage{amsmath,amsfonts,amsthm}
+% \usepackage[pdftex]{graphicx}
+\RequirePackage{pifont}
+\RequirePackage{siunitx}
+\RequirePackage{enumitem}
+\RequirePackage{geometry}
+\RequirePackage{makecell} 
+\RequirePackage{titlesec}
+\RequirePackage{multirow}
+\RequirePackage{subcaption}
+\RequirePackage{pdflscape} 
+\RequirePackage{etoolbox} 
+
+%Newly Added packages
+\RequirePackage{dcolumn}
+
+%%%
+
+\usepackage[
+  backend=biber,     % use biber (not bibtex
+  style=apa,         % APA 7th edition
+  sortcites,         % optional: sort multiple cites
+  natbib=true        % if you like natbib-style \citep/\citet
+]{biblatex}
+
+%\DeclareLanguageMapping{english}{english-apa}  % if writing in English
+\DeclareLanguageMapping{spanish}{spanish-apa} % if writing in Spanish
+
+
+\endinput

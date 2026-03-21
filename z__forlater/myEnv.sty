@@ -1,0 +1,298 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{myEnv}[personal enviroments]
+
+\RequirePackage{environ}   % for \NewEnviron
+\RequirePackage{caption} 
+
+%the enviroment for a figure, here you can set the title as first argument, and the second argument is if you use a coding language.
+
+\crefname{figure}{Figura}{Figuras}
+\Crefname{figure}{Figura}{Figuras}
+
+\makeatletter
+\newcommand{\FigureLab@maybeLabel}[1]{%
+  % store the raw argument in \@tempa
+  \edef\@tempa{#1}%
+  \ifx\@tempa\@empty
+    \label{fig:\thefigure}%
+  \else
+    \label{#1}%
+  \fi
+}
+
+\NewEnviron{FigureLab}[3]{%
+   \begin{figure}[H]
+    \refstepcounter{figure}%
+    \captionsetup{position=above,labelformat=empty}%
+    \FigureLab@maybeLabel{#3}
+    \caption*{Figura~\thefigure:~#1}%
+    \centering
+    \BODY
+    \captionsetup{position=below,labelformat=empty}%
+    \caption*{\AssigmentNumber: Física Mecánica, UVG 2026; #2}%
+  \end{figure}%
+}
+\makeatother
+
+%The following command is used if the user wants to hyperreference the figure with a special name rather than the provided one.
+\newcommand{\FigRef}[1]{%
+  \IfSubStr{#1}{:}{\StrBehind{#1}{:}[\disp]}{\edef\disp{\ref*{#1}}}%
+  \hyperref[#1]{\disp}%
+}
+
+%the enviroment for a table, here you can set the title as first argument, and the second argument is if you use a coding language.
+
+\crefname{table}{Tabla}{Tablas}
+\Crefname{table}{Tabla}{Tablas}
+
+\makeatletter
+\newcommand{\TableLab@maybeLabel}[1]{%
+  % store the raw argument in \@tempa
+  \edef\@tempa{#1}%
+  % if it’s empty, label "tab:<Roman table number>", else label "#1"
+  \ifx\@tempa\@empty
+    \label{tab:\thetable}%
+  \else
+    \label{#1}%
+  \fi
+}
+
+\NewEnviron{TableLab}[3]{%
+  \begin{table}[H]%
+    \setlength{\tabcolsep}{8pt}
+    
+    \renewcommand{\thetable}{\Roman{table}}%
+    \refstepcounter{table}%
+    % decide on the label here:
+    \TableLab@maybeLabel{#3}%
+    % top (unnumbered) caption
+    \captionsetup{position=above,labelformat=empty}%
+    \caption*{Tabla~\thetable:~#1}%
+    \centering
+    \BODY
+    % bottom note (unnumbered) caption
+    \captionsetup{position=below,labelformat=empty}%
+    \caption*{\AssigmentNumber: Física Mecánica, UVG 2026; #2}%
+  \end{table}%
+}
+\makeatother
+
+%The following command is used if the user wants to hyperreference the tables with a special name rather than the provided one.
+\newcommand{\TabRef}[1]{%
+  \IfSubStr{#1}{:}{\StrBehind{#1}{:}[\disp]}{\edef\disp{\ref*{#1}}}%
+  \hyperref[#1]{\disp}%
+}
+
+
+\newlist{objectives}{enumerate}{1}
+\setlist[objectives]{%
+  label=Objetivo~\Alph*:,     
+  ref=\Alph*,                 
+  labelindent=7.5em,           % move label in by 12 ‘em’ units 
+  labelsep=0.5em,             % small gap between label and text
+  leftmargin=!,               % compute leftmargin = labelindent+labelwidth+labelsep
+}
+
+\newlist{supuestos}{enumerate}{1}
+\setlist[supuestos]{%
+  label      = Supuestos~\roman*:,   % how the list itself prints
+  ref        = \roman*,              % how the counter value is stored for \ref
+  labelindent=7.5em,
+  labelsep   = 0.5em,
+  leftmargin = !
+}
+\crefname{supuestosi}{Supuesto}{Supuestos}
+\Crefname{supuestosi}{Supuesto}{Supuestos}
+
+\newcounter{hypothesis}
+\renewcommand{\thehypothesis}{\Alph{hypothesis}} %so that the references knows is a letter rather than a number.
+\crefname{hypothesis}{Hipótesis}{Hipótesis}
+\Crefname{hypothesis}{Hipótesis}{Hipótesis}
+
+
+\newenvironment{hipotesis}[5]{%
+  \refstepcounter{hypothesis}% advance counter & anchor
+  \par\vspace{8pt}%
+  \noindent\hspace*{30pt}\textbf{Hipótesis~\thehypothesis}%
+    \label{hyp:\thehypothesis}%
+  \par\vspace{12pt}%
+  \noindent \textbf{Hipótesis General ~\thehypothesis:}\quad #1
+  % — H₀ line
+  \par\vspace{12pt}%
+  \noindent\hspace*{170pt}$H_{0}$:\quad #2%
+  % — Hₐ line
+  \par\vspace{16pt}%
+  \noindent\hspace*{170pt}$H_{a}$:\quad #3%
+  % — Model line, only if #3 isn’t blank
+  \ifblank{#3}{}{%
+    \par\vspace{16pt}%
+    \ifblank{#4}{}{%  % Check if #4 is blank
+    \noindent\hspace*{30pt}\textbf{Model~\thehypothesis}:\quad #4%  % Display the line if #4 is not blank
+  }%
+  }%
+  % — Especificaciones line, only if #4 isn’t blank
+  \ifblank{#4}{}{%
+    \par\vspace{12pt}%
+    \small \noindent\hspace*{5pt}\text{Especificaciones del modelo}:#5%
+  }%
+  \par
+}{%
+  % no special code at \end{hipotesis}
+}
+
+
+\newcounter{eqn}
+\renewcommand{\theeqn}{\arabic{eqn}}            % prints 1,2,3…
+\crefname{eqn}{Ecuación}{Ecuaciones}              % cleveref “Equation 1”
+\Crefname{eqn}{Ecuación}{Ecuaciones}
+
+\newenvironment{EquationLab}[2]{%
+  \par\vspace{8pt}%
+  \refstepcounter{eqn}% increment the counter & anchor the hyperlink
+  \noindent\hspace*{55pt}\noindent\textbf{Ecuación \theeqn:}\label{eq:\theeqn}% auto-label eq:1, eq:2…
+  \par\vspace{6pt}%
+  \begin{equation*}#1\end{equation*}% display your math without numbering
+  \par\vspace{6pt}%
+  \noindent\textbf{Donde:} #2% your variable specifications
+  \par\vspace{8pt}%
+}{%
+  % nothing special at \end{EquationSpec}
+}
+
+
+
+\makeatletter
+  % 1) define the counter
+  \newcounter{calculos}
+  \renewcommand{\thecalculos}{\arabic{calculos}}
+
+  % 2) tell cleveref what to call it
+  \crefname{calculos}{Cálculo}{Cálculos}
+
+  % 3) your environment
+  \NewEnviron{calculoLab}[2]{%
+    \par\vspace{8pt}%
+    \refstepcounter{calculos}%           % increment
+    \label{calculos:\thecalculos}%       % now label = calculos:1, calculos:2, …
+    \noindent\hspace*{55pt}%
+      \textbf{Cálculo~\thecalculos:~#1}%  % use accent in the printed title if you like
+    \vspace{6pt}%
+    \begin{equation*}
+      \renewcommand{\arraystretch}{1.3}%   % taller rows
+      {\large \BODY}                       % your math
+    \end{equation*}
+    \vspace{6pt}%
+    \noindent\hspace*{10pt}%
+      \small\textit{Los cálculos se basaron en las siguientes ecuaciones: #2}%
+    \normalsize
+  }
+\makeatother
+
+\makeatletter
+  % 1) create the counter and its printed form
+  \newcounter{metodologia}
+  \renewcommand{\themetodologia}{\Alph{metodologia}}
+
+  % 2) tell cleveref how to name it
+  \crefname{metodologia}{Metodología}{Metodologías}
+  \Crefname{metodologia}{Metodología}{Metodologías}
+
+  % 3) define the environment
+  \NewEnviron{metodologiaLab}[1]{%
+    \par\vspace{8pt}%
+    \refstepcounter{metodologia}%            % increment counter
+    \label{met:\themetodologia}%              % auto-label as met:1, met:2, …
+    \noindent\hspace*{55pt}%
+      \textbf{Metodología~\themetodologia:\ }#1% heading
+    \vspace{6pt}%
+
+    \BODY                                      % your content goes here
+
+    \vspace{6pt}%
+    \noindent\hspace*{10pt}\normalsize         % reset any stray size/indent
+  }
+\makeatother
+
+
+
+%==========ANEXO=========
+\crefname{anexofigure}{Anexo Figura}{Anexo Figuras}
+
+\makeatletter
+\newcounter{anexofigure}
+\renewcommand{\theanexofigure}{\arabic{anexofigure}}
+\crefname{anexofigure}{Anexo Figura}{Anexo Figuras}
+\newcommand{\FigureAnexo@maybeLabel}[1]{%
+  % store the raw argument in \@tempa
+  \edef\@tempa{#1}%
+  \ifx\@tempa\@empty
+    \label{Afig:\theanexofigure}%
+  \else
+    \label{#1}%
+  \fi
+}
+
+\NewEnviron{FigureAnexo}[3]{%
+   \begin{figure}[H]
+    \refstepcounter{anexofigure}%
+    \captionsetup{position=above,labelformat=empty}%
+    \FigureAnexo@maybeLabel{#3}
+    \caption*{Anexo Figura~\theanexofigure:~#1}%
+    \centering
+    \BODY
+    \captionsetup{position=below,labelformat=empty}%
+    \caption*{\AssigmentNumber: Física Mecánica, UVG 2026; #2}%
+  \end{figure}%
+}
+\makeatother
+
+%\NewEnviron{FigureAnexo}[3]{%
+%   \begin{figure}[htbp]
+%    \refstepcounter{figure}%
+%    \captionsetup{position=above,labelformat=empty}%
+%    \caption*{Anexo Figura~\thefigure:~#1}%
+%    \label{#3}% <— automatic label here
+%    \centering
+%    \BODY
+%    \captionsetup{position=below,labelformat=empty}%
+%    \caption*{\AssigmentNumber: Física 2, UVG 2025; #2}%
+%  \end{figure}%
+%}
+\crefname{anexotable}{Anexo Tabla}{Anexo Tablas}
+
+
+\crefname{anexotable}{Anexo Tabla}{Anexo Tablas}
+\makeatletter
+\newcounter{anexotable}
+\renewcommand{\theanexotable}{\Roman{anexotable}}
+\crefname{anexotable}{Anexo Tabla}{Anexo Tablas}
+\newcommand{\TableAnexo@maybeLabel}[1]{%
+    \edef\@tempa{#1}%
+    \ifx\@tempa\@empty
+      \label{tab:\theanexotable}%
+    \else
+      \label{#1}%
+    \fi
+  }
+
+\NewEnviron{TableAnexo}[3]{%
+  \begin{table}[H]%
+    \setlength{\tabcolsep}{8pt}
+    \refstepcounter{anexotable}%
+    % decide on the label here:
+    \TableAnexo@maybeLabel{#3}%   
+    % top (unnumbered) caption
+    \captionsetup{position=above,labelformat=empty}%
+    \caption*{Anexo Tabla~\theanexotable:~#1}%
+    \centering
+    \BODY
+    % bottom note (unnumbered) caption
+    \captionsetup{position=below,labelformat=empty}%
+    \caption*{\AssigmentNumber: Física Mecánica, UVG 2026; #2}%
+  \end{table}%
+}
+\makeatother
+
+
+
+\endinput

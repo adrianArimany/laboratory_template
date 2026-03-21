@@ -1,0 +1,502 @@
+
+\documentclass[12pt,a4paper]{config/myConfig}
+\usepackage{silence}
+\WarningFilter{latex}{You have requested}
+\usepackage{config/myDependencies}
+\usepackage{style/myEnv}
+\usepackage{style/myCommands}
+\usepackage{style/myColors}
+
+\addbibresource{bibliography.bib}  % your .bib file
+
+%Number of the practica for this assigment:
+\newcommand{\AssigmentNumber}{Practica 9}
+\newcommand{\AssigmentDate}{28 Abril del 2025}
+%------------------
+%If any computer language used:
+\newcommand{\Rcode}{R - version 3.4.4}
+%----------------------
+%Palabras Clave para el informe:
+\newcommand{\PalabrasClave}{\small \it
+Ley de Boyle,$\ $Ley de Charles,$\ $Intervalo de Confianza,$\ $Simulador PHET
+}
+
+\title{\Large $\ $\\ \bf Leyes de los Gases Ideales}
+
+\author
+\info
+
+\abstract{\PalabrasClave
+\normalsize
+\\[17pt]
+{\bf Abstract.} Este reporte consiste en hacer estimaciones para medir las constantes que se estudian en las Leyes de Charles y las Leyes de Boyle. Para esto se hicieron dos experimentos con dos diferentes gasas para evaluar la Ley de Boyle; mientras que la Ley de Charles se estudio mediante una simulación usando PHET. Se hicieron intervalos de Confianza del 95\% para evaluar la significancia de estas constantes, y en todo los casos hubo suficiente evidencia para sugerir que las constantes son significativas ante el modelo estadístico. No se hubo evidencia para sugerir errores sistemáticos durante el experimento, lo que sugiere que los resultados estimados son imparciales a la teoría de la ley de gases.}
+
+\sisetup{
+  round-mode            = places,
+  round-precision       = 3,        % six decimals for fixed columns
+  exponent-mode         = scientific,
+  output-exponent-marker= e,        % use literal “e”
+  exponent-product      = ,        % no separator before the e
+}
+\begin{document}
+\thispagestyle{myheadings}
+\pagestyle{myheadings}
+\markright{\tt \AssigmentNumber|    \AssigmentDate}%check the date
+
+
+
+\section{Marco Conceptual}
+\label{sec:MARCO-CONCEPTUAL}
+
+\subsection{Antecedentes}
+\label{sec:ANTECEDENTES}
+
+En el estudio del comportamiento de los gases, existen leyes fundamentales que relacionan sus variables principales: presión, volumen y temperatura. Estas leyes permiten predecir cómo responderá un gas ante cambios en su entorno, siempre que se mantengan ciertas condiciones constantes.  
+
+La ley de Boyle establece que, a temperatura constante, el volumen de un gas es inversamente proporcional a su presión. Es decir, cuando el volumen disminuye, la presión aumenta, y viceversa, siempre que la temperatura no cambie. Esta relación se expresa matemáticamente como 
+$PV = k$m donde k es una constante, y es válida para gases ideales en condiciones donde las fuerzas inter-moleculares sean despreciables. (\cite{physicsTextbook}). 
+
+La ley de Charles describe la relación directa entre volumen y temperatura de un gas cuando la presión se mantiene constante. Según esta ley, al aumentar la temperatura de un gas, su volumen también aumenta de forma proporcional, lo que se expresa como 
+$k = \frac{V}{T}$, donde $T$ debe de estar en Kelvin. Ambas leyes forman parte del modelo del gas ideal, que supone que las partículas del gas no interactúan entre sí, ocupan un volumen despreciable y colisionan elásticamente. Estas suposiciones permiten simplificar el comportamiento real de los gases y establecer relaciones precisas entre sus variables (\cite{physicsTextbook}). 
+
+En la práctica se trabajará con dos gases distintos (aire y dióxido de carbono), aplicando la Ley de Boyle en un experimento físico y la Ley de Charles en una simulación digital. Se analizarán las variables: presión, volumen y temperatura a través del análisis gráfico de estas relaciones se busca confirmar que ambas leyes se cumplen sin importar el tipo de vas, validando así los principios del modelo del gas ideal.  
+
+\section{Introducción}
+\label{sec:INTRODUCCION}
+
+\subsection{Planteamiento del Problema}
+\label{sec:PLANTAMIENTO-PROBLEMA}
+
+Determinar cómo se relacionan las variables presión, volumen y temperatura en un gas, verificando si la presión varía inversamente con el volumen a temperatura constante (Ley de Boyle) y si el volumen varía directamente con la temperatura a presión constante (Ley de Charles), utilizando tanto métodos experimentales como simulaciones digitales. Además, se busca comprobar si estas relaciones se cumplen para distintos gases, como el aire y el $CO_2$, bajo condiciones ideales. 
+
+\subsection{Supuestos de la Investigación}
+\label{sec:SUPUESTOS}
+
+\begin{supuestos}
+  \item \label{su:uno} Alta energía cinética
+  \item \label{su:dos} Interacciones inter-moleculares despreciables
+  \item \label{su:tres} Volumen molecular despreciable
+\end{supuestos}
+  
+\section{Hipótesis y Objetivos}
+\label{sec:HIPOTESIS-OBJECTIVOS}
+
+\subsection{Hipótesis}
+\label{sec:HIPOTESIS}
+
+
+\begin{hipotesis}
+  {Se propone una relación lineal entre el reciproco de la presión ($Pa$) y el volumen de un gas ($m^3$). Donde se establece que la presión tiene un efecto significativo del 5\% ante el volumen de un gas.}
+  {$\beta_1 = 0$} %hipotesis nula
+  {$\beta_1 \neq 0$} %hipotesis alternativa
+  {$\text{Volumen}_{\text{gas}} = \beta_0 + \beta_1(\text{presión}_{\text{gas}})^{-1} + \epsilon$} %si se requiere definir el modelo de investigacion
+  {
+  \begin{itemize}
+      \item $\epsilon_1,\cdots, \epsilon_n \sim N(0,\sigma^2)$
+    \end{itemize}} %si se requiere definir los supuestos del modelo.
+\end{hipotesis}
+
+\begin{hipotesis}
+  {Se propone una relación lineal entre el reciproco de la presión ($Pa$) y el volumen del gas $CO_2$ ($m^3$). Donde se establece que la presión tiene un efecto significativo del 5\% ante el volumen del oxigeno.}
+  {$\beta_1 = 0$}
+  {$\beta_1 \neq 0$}
+  {$\text{Volumen}_{CO_2} = \beta_0 + \beta_1(\text{presión}_{CO_2})^{-1} + \epsilon$}
+  {\begin{itemize}
+      \item $\epsilon_1,\cdots, \epsilon_n \sim N(0,\sigma^2)$
+    \end{itemize}}
+\end{hipotesis}
+
+\begin{hipotesis}
+  {Se propone una relación lineal entre la temperatura (K) y el ancho del volumen del compartimiento de las moléculas (nm). Donde se establece que la temperatura tiene un efecto significativo del 5\% ante el ancho del volumen del compartimiento.}
+  {$\beta_1 = 0$}
+  {$\beta_1 \neq 0$}
+  {$\text{Ancho} = \beta_0 + \beta_1(\text{Temperatura}) + \epsilon$}
+  {\begin{itemize}
+      \item $\epsilon_1,\cdots, \epsilon_n \sim N(0,\sigma^2)$
+    \end{itemize}}
+\end{hipotesis}
+
+\subsection{Objetivos}
+\label{sec:OBJECTIVOS}
+
+\begin{objectives}
+  \item \label{obj:A} Determinar los valores de las constantes mediante la ley de Boyle.
+  \item \label{obj:B} Evaluar las contantes usando la ley de Charles.
+  \item \label{obj:C} Relacionar los modelos físicos con los modelos estadísticos.
+\end{objectives}
+
+
+
+\section{Metodología}
+\label{sec:METODOLOGIA}
+
+\begin{FigureLab}{Experimento Montado para experimentos Ley de Boyle}{}{fig:Montaje Boyle}
+  \includegraphics[width=0.5\linewidth]{images/practica_9/sistema montado.png}
+\end{FigureLab}
+
+\begin{FigureLab}{Experimento Montado para experimento de Ley de Charles}{https://phet.colorado.edu/en/simulations/gas-properties}{fig:Montaje Charles}
+      \includegraphics[width=0.5\linewidth]{images/practica_8/sistemamontadoparticulas.jpg}
+\end{FigureLab}
+
+
+
+%En el texto: Como se muestra en la \cref{fig:Montaje 1}, \FigRef{fig:Montaje 1} 
+
+
+\subsection{Materiales}
+\label{sec:MATERIALES}
+
+\begin{TableLab}{Tabla de Materiales}{}{tab:Materiales}
+    \rowcolors{2}{gray!10}{white}
+    \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+    \begin{tabularx}{\textwidth}{@{} l l >{\hsize=0.6\hsize}Y  >{\raggedright\arraybackslash}X @{}}
+        \toprule
+        \rowcolor{lightOrange}
+        \textbf{Material} & \textbf{Cantidad} & \textbf{Especificación} \\
+        \midrule
+        Sensor de presión absoluta PASCO & 1 & Se usa en los experimentos en el laboratorio para medir la presión al conectarlo con la jeringa. \\
+        Jeringa plástica  & 1 & Se uso para encapsular la presión del gas en los experimentos de laboratorio. \\
+        Pequeña manguera con adaptador & 1 & Se uso para succionar el oxigeno del beaker durante el segundo experimento. \\
+        Beaker & 1 & Se uso para mesclar el bicarbonato de sodio y el vinagre en el segundo experimento. \\
+        Sobres de bicarbonato de sodio & 3 & Se uso para encapsular el oxigeno con los fósforos al mesclar lo con el vinagre en el segundo experimento. \\
+        Botella de Vinagre Balsámico & 1 & Se uso para encapsular el oxigeno con los fósforos al mesclar lo con el bicarbonato de sodio en el segundo experimento. \\
+        fósforos & 10 & Se uso para encapsular el oxigeno al acercar un fósforo con la mezcla de bicarbonato de sodio y vinagre. \\
+        \bottomrule
+    \end{tabularx}
+\end{TableLab}
+
+%\cref{tab:Materiales} or \TabRef{tab:Materiales}
+
+
+\subsection{Metodos}
+\label{sec:METODOS}
+
+METODOLOGÍA para Ley de Boyle  
+\begin{enumerate}
+    \item Jalar el embolo de la jeringa hasta la marca de 20ml 
+    \item Conectar la jeringa vacía al sensor de presión con el tubo flexible asegurando de que el sistema sea un sistema cerrado.  
+    \item Empujar el embolo de la jeringa hasta aproximadamente la marca de 2ml y soltar para observar que el pistón de hule de la jeringa no regresa a su posición inicial.  
+    \item Configurar el software Pasco seleccionando el canal correspondiente y luego el sensor “Absolute Pressure Sensor” Elegir “presión” como variable del eje Y y se configuró el eje X como “tiempo” 
+    \item Iniciar la grabación  
+    \item Ajustar el volumen de la jeringa comenzando en 20ml, luego ir reduciendo el volumen en intervalos de 2ml (18, 16, 14 y 12ml), manteniendo cada valor unos segundos para registrar datos estables. \item Medir el valor promedio de la presión en cada volumen  
+    \item Crear un gráfico de dispersión con los datos de presión vs volumen y agregar una curva de ajuste potencial junto con su ecuación y $R^2$. Agregar barras de error.
+    \item Repetir las mediciones con $CO^2$ 
+\end{enumerate}
+
+METODOLOGÍA para Ley de Charles
+\begin{enumerate}
+    \item Abrir el simulador “Gas Properties” y seleccionar una cámara con presión constante  
+    \item Introducir moléculas azules en la cámara  
+    \item Seleccionar como constante “Pressure V” 
+    \item Seleccionar la herramienta “Width” para medir el volumen 
+    \item Aumentar la temperatura de manera progresiva registrando el volumen (al menos 5 datos).  
+    \item Repetir el experimento con moléculas rojas 
+    \item Graficar el volumen contra la temperatura para ambas moléculas y aplicar una regresión lineal.  
+\end{enumerate}
+
+\section{Ecuaciones}
+\label{sec:ECUACIONES}
+
+
+%Example of an equation
+\begin{EquationLab}
+{v = \frac{k_1}{p}}
+{\begin{itemize}
+    \item $p$: presión (Pa)
+    \item $V$: Volumen ($m^3$)
+    \item $k_1$: constante ($m^3 \cdot Pa$)
+\end{itemize}}
+\end{EquationLab}
+
+%\cref{eq:1}
+
+\begin{EquationLab}
+{v = k_2T}
+{\begin{itemize}
+    \item $T$: Temperatura ($^{\circ} C$)
+    \item $V$: Volumen ($m^3$)
+    \item $k_2$: constante ($\frac{m^3}{^{\circ} C}$)
+\end{itemize}}
+\end{EquationLab}
+
+\begin{EquationLab}
+{p = k_3T}
+{\begin{itemize}
+    \item $T$: Temperatura ($^{\circ} C$)
+    \item $p$: presión (Pa)
+    \item $k_3$: constante ($Pa$)
+\end{itemize}}
+\end{EquationLab}
+
+\section{Análisis}
+\label{sec:ANALISIS}
+
+\subsection{Resultados}
+\label{sec:RESULTADOS}
+
+\subsubsection*{Experimento sobre Ley de Boyle}
+
+%Example of a table:
+\begin{TableLab}{Resultados para las Presiones inversas y el Volumen de los Gases}{}{}
+\setlength{\tabcolsep}{10pt}
+\rowcolors{2}{gray!12}{white}
+\begin{tabular}{@{} 
+    >{\raggedright\arraybackslash}p{3cm} 
+    >{\centering\arraybackslash}p{3cm} 
+    >{\centering\arraybackslash}p{3cm} 
+    >{\centering\arraybackslash}p{3cm} @{}}
+\toprule 
+  & \makecell{\textbf{Muestra 1}\\\textbf{Aire}} 
+  & \makecell{\textbf{Muestra 2}\\\textbf{Aire}} 
+  & \makecell{\textbf{Muestra 1}\\\textbf{CO$_2$}} \\
+\cmidrule(lr){2-4}
+\makecell{Volumen \\ (m$^{3}$)} 
+  & \makecell{Recíproco de\\Presión (Pa$^{-1}$)}
+  & \makecell{Recíproco de\\Presión (Pa$^{-1}$)}
+  & \makecell{Recíproco de\\Presión (Pa$^{-1}$)} \\
+\midrule
+1.20E-05 & 1.2e-05 & 1.2e-05 & 1.2e-05 \\
+1.00E-05 & 1.0e-05 & 1.0e-05 & 9.1e-06 \\
+8.00E-06 & 8.4e-06 & 8.4e-06 & 7.8e-06 \\
+6.00E-06 & 6.5e-06 & 6.6e-06 & 6.1e-06 \\
+4.00E-06 & 4.7e-06 & 4.8e-06 & 4.5e-06 \\
+2.00E-06 & 2.9e-06 & 2.9e-06 & 2.8e-06 \\
+\bottomrule
+\end{tabular}
+\end{TableLab}
+
+\begin{TableLab}{Resultados para la Regresión Lineal entre el Volumen y la Presión Inversa}{\Rcode}{}
+\begin{tabular}{@{\extracolsep{5pt}}lccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{3}{c}{\textit{Variable Dependiente:}} \\ 
+\cline{2-4} 
+\\[-1.8ex] & \multicolumn{3}{c}{Volumen ($m^3$)} \\ 
+\\[-1.8ex] & Muestra 1 - Aire & Muestra 2 - Aire & Muestra 3 - $CO_2$\\ 
+\hline \\[-1.8ex] 
+  Intercepto & $-$1.1e-06$^{***}$ & $-$1.3e-06$^{***}$ & $-$1.3e-06$^{***}$ \\ 
+  & (3.6e-08) & (1.0e-07) & (2.0e-07) \\
+  & & & \\ 
+ (Presion)$^{-1}$ & 1.098$^{***}$ & 1.115$^{***}$ & 1.211$^{***}$ \\ 
+  (Pa)$^{-1}$ & (0.005) & (0.013) & (0.027) \\
+  & & & \\ 
+\hline \\[-1.8ex] 
+$R^2$ & 1 & 0.999 & 0.998 \\ 
+Observaciones & 6 & 6 & 6 \\
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{3}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular}
+\begin{tabular}[t]{lccc}
+\toprule
+Diagnostico & M1-Aire & M2-Aire & M1-$CO_2$\\
+\midrule
+Shapiro–Wilk W & 0.936 (p=0.628) OK & 0.977 (p=0.936) OK & 0.84 (p=0.131) OK\\
+Breusch–Pagan $\chi^2$ & 0.434 (p=0.51) OK & 4.157 (p=0.041) Failed & 1.8 (p=0.18) OK \\
+Durbin–Watson D & 1.557 (p=0.086) OK & 1.741 (p=0.14) OK & 2.885 (p=0.752) OK\\
+\bottomrule
+\end{tabular}
+\end{TableLab}
+
+\begin{FigureLab}{Diagramas de Dispersión entre el Volumen y la Presión Inversa}{\Rcode}{}
+    \includegraphics[width=0.9\linewidth]{images/practica_9/image_boyle.png}
+\end{FigureLab}
+
+%Como se ve en la \cref{tab:II},
+
+\subsubsection*{Experimento sobre Ley de Charles}
+
+\begin{TableLab}{Resultados para los Anchos y las Temperaturas en las moléculas}{}{}
+    \setlength{\tabcolsep}{10pt}
+    \rowcolors{2}{gray!12}{white}
+\begin{tabular}{@{} 
+    >{\centering\arraybackslash}p{6cm} 
+    >{\centering\arraybackslash}p{6cm} @{}}
+\toprule
+\textbf{Moléculas Pesadas} 
+  & \textbf{Moléculas Livianas} \\
+\midrule
+%–– Inner table for Pesadas ––
+\rowcolors{2}{gray!12}{white}
+\begin{tabular}{@{} c c @{}}
+  \textbf{Ancho }(nm) & \textbf{Temperatura }($^\circ$ C) \\
+  6.4   & 282 \\
+  6.8   & 296 \\
+  10    & 400 \\
+  12.4  & 496 \\
+  15    & 600 \\
+\end{tabular}
+&
+%–– Inner table for Livianas ––
+\rowcolors{2}{gray!12}{white}
+\begin{tabular}{@{} c c @{}}
+  \textbf{Ancho }(nm) & \textbf{Temperatura }($^\circ$ C) \\
+  6.8   & 203    \\
+  9.2   & 268    \\
+  10    & 300    \\
+  11.9  & 358    \\
+  13.7  & 410    \\
+\end{tabular}
+\\
+\bottomrule
+\end{tabular}
+\end{TableLab}
+
+\begin{TableLab}{Resultados para la Regresión Lineal entre el Ancho y la Temperatura}{\Rcode}{}
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Variable Dependiente:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & \multicolumn{2}{c}{Ancho (nm)} \\ 
+\\[-1.8ex] & Pesadas & Livianas\\ 
+\hline \\[-1.8ex] 
+ Intercepto & -1.1513$^{*}$ & 0.20881 \\ 
+  & (0.3321) & (0.2562) \\ 
+  & & \\ 
+ Temperatura ($^{\circ}$) & 0.0271$^{***}$ & 0.0329$^{***}$ \\ 
+  & (0.0007) & (0.0008) \\ 
+  & & \\ 
+\hline \\[-1.8ex] 
+$R^2$ & 0.998 & 0.998 \\ 
+Observaciones & 5 & 5 \\  
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\begin{tabular}[t]{lllrrc}
+\toprule
+Model & Assumption & Diagnostic & Statistic & p\_value & Verdict\\
+\midrule
+\cellcolor{gray!10}{m1} & \cellcolor{gray!10}{Normality} & \cellcolor{gray!10}{Shapiro–Wilk W} & \cellcolor{gray!10}{0.857} & \cellcolor{gray!10}{0.219} & \cellcolor{gray!10}{OK}\\
+m1 & Homoscedasticity & Breusch–Pagan $\chi^2$ & 0.010 & 0.919 & OK\\
+\cellcolor{gray!10}{m1} & \cellcolor{gray!10}{No Autocorrelation} & \cellcolor{gray!10}{Durbin–Watson D} & \cellcolor{gray!10}{1.818} & \cellcolor{gray!10}{0.149} & \cellcolor{gray!10}{OK}\\
+m2 & Normality & Shapiro–Wilk W & 0.778 & 0.053 & OK\\
+\cellcolor{gray!10}{m2} & \cellcolor{gray!10}{Homoscedasticity} & \cellcolor{gray!10}{Breusch–Pagan X2} & \cellcolor{gray!10}{0.760} & \cellcolor{gray!10}{0.383} & \cellcolor{gray!10}{OK}\\
+\addlinespace
+m2 & No Autocorrelation & Durbin–Watson D & 2.807 & 0.679 & OK\\
+\bottomrule
+\end{tabular}
+\end{TableLab}
+
+\begin{FigureLab}{Diagramas de Dispersión entre el Ancho y la Temperatura}{\Rcode}{}
+    \includegraphics[width=0.8\linewidth]{images/practica_9/image_charles.png}
+\end{FigureLab}
+
+
+
+\subsubsection*{Resultados para las hipótesis}
+
+\begin{TableLab}{Veredicto ante \cref{hyp:A} y \cref{hyp:B} con un nivel de 95\% de confianza}{\Rcode}{}
+\begin{tabular}{@{}p{3cm}|l
+               S[table-format=1.6]
+               S[table-format=1.6]
+               S[table-format=1.3e-1]@{}}
+    \toprule
+    Evidencia en contra de {$H_0$}
+      & \textbf{Muestra de Gas}
+      & {limite inferior} 
+      & {limite superior} 
+      & {valor-P} \\
+    %Vertical Line
+      
+    \midrule
+    Rechazo en 5\%  & Muestra 1-Aire  & 1.085634  & 1.110923  & 1.75e-09 \\
+Rechazo en 5\%  & Muestra 2-Aire  & 1.079742  & 1.151003  & 1.05e-07 \\
+Rechazo en 5\%  & Muestra 1-$CO_2$ & 1.136623  & 1.286245  & 1.46e-06 \\
+    \bottomrule
+  \end{tabular}
+\end{TableLab}
+
+\begin{TableLab}{Veredicto ante \cref{hyp:C} con un nivel de 95\% de confianza}{\Rcode}{}
+ \begin{tabular}{@{}p{3cm}|l
+               S[table-format=1.3e-1]
+               S[table-format=1.3e-1]
+               S[table-format=1.3e-1]@{}}
+    \toprule
+    Evidencia en contra de {$H_0$}
+      & \textbf{Moléculas}
+      & {limite inferior} 
+      & {limite superior} 
+      & {valor-P} \\
+    %Vertical Line
+    \midrule
+    Rechazo en 5\% & Pesadas & 0.0247 &  0.0296 & 4.49e-05 \\
+    Rechazo en 5\% & Livianas & 0.0303 &  0.0354 & 3.31e-05 \\
+    \bottomrule
+  \end{tabular}
+\end{TableLab}
+
+\section{Discusión de Resultados}
+\label{sec:DISCUSSION}
+
+Este experimento consiste en relacionar la presión, volumen y temperatura en los gases mediante estimaciones estadísticas, verificando la relación que existe dado la Ley de Charles y Ley de Boyle (\cite{physicsTextbook}).  Los\secref{sec:OBJECTIVOS} de este experimento era estimar el valor de la constante (\cref{eq:1}) mediante la Ley de Boyle (\hyperref[obj:A]{objetivo A}); evaluar la constante (\cref{eq:2}) mediante la Ley de Charles (\hyperref[obj:B]{objetivo B}); y por ultimo, relacionar los resultados obtenidos en los modelos estadísticos con la teoría de los gases  (\hyperref[obj:C]{objetivo C}). Como se tiene en los \secref{sec:SUPUESTOS}, primero se asumió que hay alta energía cinética (\cref{su:uno}); después, se asume que las interacciones inter-moleculares son despreciables (\cref{su:dos}); y por ultimo que el Volumen molecular es despreciable (\cref{su:tres}).\newline 
+
+Para esta practica se estudiaron tres hipótesis, en especifico, dos son para el experimento sobre la Ley de Boyle donde se estudiaron dos gases diferentes, primero se estudio dos muestras del Aire (\cref{hyp:A}) y después una sola muestra del dióxido de carbono (\cref{hyp:B}). Por el otro lado la otra hipótesis fue usando la simulación de PHET, se tomaron dos muestras con diferentes tipos de moléculas (\cref{hyp:C}). Las tres \secref{sec:HIPOTESIS} son pruebas $t$ para los coeficientes de regresión en los modelos lineales plantados presentado las afirmaciones mediante un intervalo de confianza del 95\%. \newline    
+
+Las afirmaciones para \cref{hyp:A} y \cref{hyp:B} se pueden apreciar en la \cref{tab:VI}, como se observa en el intervalo de confianza del 95\%, el cero no se encuentra en el rango del intervalo en ninguno de las muestras implicando que hay evidencia para rechazar la hipótesis con 5\% nivel de significancia las tres casos observados. Esto implica que el reciproco de la presión tiene una correlación significante ante el cambio del volumen. En especifico notemos la \cref{tab:III} da a entender que en las tres muestras independientemente el reciproco de la presión explica precisamente al volumen, ademas note que las tres coeficientes para el reciproco de la presión tienen errores estándares bajos, lo cual sugiere que no hubo mucha desviaciones ante los resultados observados, esto mismo se visualiza en \cref{fig:3}. \newline
+
+Aunque en la tabla de la prueba de diagnósticos en \cref{tab:III} note que para la Muestra 2 del Aire, hay evidencia para rechazar la hipótesis nula de la prueba sobre la homocedasticidad en 5\% de significancia, en este caso la \cref{hyp:A} tiene un sesgo desconocido el cual los residuos del modelo están capturando información que no se esta siendo estudiada adecuadamente en el modelo lineal. Pero note que la otra muestra del Aire no tiene ninguna evidencia que los residuos tengan heterocedasticidad, entonces es muy factible que esta evidencia de heterocedasticidad se este produciendo por casualidad. \newline
+      
+De manera similar, las afirmaciones para \cref{hyp:C} se presentan en la \cref{tab:VII}, donde mediante un intervalo de confianza del 95\%, el cero no se encuentra adentro del rango del intervalo en ninguno de las muestras observadas, sugiriendo que hay evidencia para rechazar la hipótesis nula al 5\% nivel de significancia, implicando que la temperatura tiene una correlación significativa ante el ancho del volumen donde las moléculas están siendo estudiadas. Si notamos los resultados en la \cref{tab:V} se observa que tanto para la moléculas pesadas como las livianas; independientemente, tiene un coeficiente de determinación cercano a 1, sugiriendo que la Temperatura tiene un poder preciso explicativo ante el cambio del Ancho, en especifico se puede evaluar que tanto las moléculas pesadas como livianas se tiene que por cada un incremento de 1$^\circ C$ en la temperatura el ancho aumenta aproximadamente 0.03 $nm$. Ademas note que el error estándar para los coeficientes obtenidos es infinitesimal, esto se puede apreciar en la \cref{fig:4} donde el todo las observaciones están muy cerca de la linea de tendencia, y por ende intervalo del error estándar esta confinado. Por ultimo note que en la \cref{tab:V} los resultados de los diagnostico enseñan que todo los supuestos de los residuos se cumplen usando un 5\% nivel de significancia. \newline 
+
+Dado que los resultados mediante las estimaciones estadísticas son consistentes, solamente con la abstracción de la homocedasticidad en la muestra 2 del aire, podemos afirmar ninguno de los \secref{sec:SUPUESTOS} fallaron durante el experimento, ademas tampoco se puede sugerir que se evaluaron errores sistemáticos durante la recolección de datos. La Ley de Boyle evalúa que la presión va tener una proporción inversa ante el volumen sin importa el gas que uno este estudiando, cual fue lo que se observo en la \cref{tab:III}; por otro lado la Ley de Charles confirma que la temperatura va tener una proporción directa con el gas sin importar el tipo de moléculas estudiadas, lo cual también se observo en la \cref{tab:IV} (\cite{physicsTextbook}).
+
+
+%\cref{hyp:A}
+%\hyperref[obj:A]{Objetivo A}
+
+%for apa7 reference use: \parencite{smith2019study}  (author, date)
+%to use in text citation use: \textcite{garcia2020efecto}. author (date)
+
+%To reference an objective do~\hyperref[obj:A]{Objetivo A}
+%To reference a equation do~\autoref{eq:equationLabel} 
+
+%To reference a table use ~\autoref{tab:TableNO} this prints the label and a hyperlink to that table
+
+
+%To reference a figure use ~\autoref{fig:figNo} this prints the figure number and the hyperlink
+
+\section{Conclusiones}
+\label{sec:CONCLUSIONES}
+
+\begin{itemize}
+    \item Mediante un intervalo de 95\% de confianza hubo suficiente evidencia para rechazar la hipótesis nula para la \cref{hyp:A}, \cref{hyp:B}, y \cref{hyp:C}. Verificando la teoría para la Ley de Charles y la Ley de Boyle.  
+    \item Se logro obtener las constantes de la Ley de Boyle para el Aire cual se estimo en 1.098 $m^3 \cdot Pa$ ($\pm$ 0.005) y se estima que el dióxido de carbono tiene una constante de 1.211 $m^3 \cdot Pa$ ($\pm 0.027$) cumpliendo \hyperref[obj:A]{objetivo A}.     
+    \item Se logro obtener las constantes de la Ley de Charles mediante el simular de PHET, donde para las moléculas pesadas se estima tener una constante de 0.0271 $\frac{nm}{^\circ C}$ ($\pm$0.0007) y las moléculas livianas se estimaron en 0.0329 $\frac{nm}{^\circ C}$ ($\pm$0.0008) lo cual cumple el \hyperref[obj:B]{objetivo B}
+    \item Como no se encontró evidencia de errores sistemáticos en los resultados debido a que ninguno de los supuestos de los residuos de los modelos tenia evidencia substancia de fallo, se puede deducir que los modelos estadísticos plantados tienen una consistencia con la Ley de Charles y la Ley de Boyle, satisfaciendo así el \hyperref[obj:C]{objetivo C}.
+\end{itemize}
+
+
+\footnotesize
+\printbibliography
+\normalsize
+
+\section*{Anexo}
+\label{sec:Anexo}
+
+\begin{FigureAnexo}{Resultados del experimento de Boyle para Muestra 1 Aire}{CAPSTONE}{}
+\includegraphics[width=0.8\linewidth]{images/practica_9/boyle2.png}
+\end{FigureAnexo}
+
+
+\begin{FigureAnexo}{Resultados del experimento de Boyle para Muestra 2 Aire}{CAPSTONE}{}
+\includegraphics[width=0.8\linewidth]{images/practica_9/boyle3.png}
+\end{FigureAnexo}
+
+
+\begin{FigureAnexo}{Resultados del experimento de Boyle para Muestra 1 $CO_2$}{CAPSTONE}{}
+\includegraphics[width=0.8\linewidth]{images/practica_9/boyle4.png}
+\end{FigureAnexo}
+
+
+\begin{FigureAnexo}{Resultados del experimento de Charles para Fuertes}{CAPSTONE}{}
+\includegraphics[width=0.8\linewidth]{images/practica_9/fuertes.png}
+\end{FigureAnexo}
+
+
+\begin{FigureAnexo}{Resultados del experimento de Charles para Livianas}{CAPSTONE}{}
+\includegraphics[width=0.8\linewidth]{images/practica_9/livianas.png}
+\end{FigureAnexo}
+
+\end{document}
