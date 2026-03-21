@@ -6,15 +6,15 @@
 \makeatletter   
 % ---------- Define keys ----------
 \pgfkeys{
-  /assignment/.is family,
-  /assignment,
-  design/.estore in=\assignmentDesign,
-  title/.estore in=\assignmentTitle,
-  date/.estore in=\assignmentDate,
-  authors/.estore in=\assignmentAuthors,
-  course/.estore in=\assignmentCourse,
-  university/.estore in=\assignmentUniversity,
-  labnumber/.estore in=\assignmentLabNumber,
+  /assignment/.is family,%
+  /assignment,%
+  design/.estore in=\assignmentDesign,%
+  title/.estore in=\assignmentTitle,%
+  date/.estore in=\assignmentDate,%
+  authors/.estore in=\assignmentAuthors,%
+  course/.estore in=\assignmentCourse,%
+  university/.estore in=\assignmentUniversity,%
+  labnumber/.estore in=\assignmentLabNumber,%
   keywords/.estore in=\assignmentKeywords
 }
 
@@ -32,14 +32,14 @@
 \NewDocumentEnvironment{assignment}{O{}}
 {
   % Parse user options
-  \pgfkeys{/assignment/.cd, #1}
+  \pgfkeys{/assignment/.cd,#1}
 
   % Load selected design dynamically
-  \IfFileExists{layout\assignmentDesign.sty}{
-    \RequirePackage{layout\assignmentDesign}
+  \IfFileExists{\assignmentDesign.sty}{
+    \input{\assignmentDesign.sty}
         }{
     \PackageWarning{assignment}{Design `\assignmentDesign' not found. Using default}
-    \RequirePackage{layoutDefault}
+    \input{default}
     }
 
     % ---------- Metadata wiring ----------
