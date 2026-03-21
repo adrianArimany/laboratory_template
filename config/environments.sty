@@ -13,9 +13,11 @@
   date/.estore in=\assignmentDate,%
   authors/.estore in=\assignmentAuthors,%
   course/.estore in=\assignmentCourse,%
+  professor/.estore in=\assigmentProfessor,%
   university/.estore in=\assignmentUniversity,%
   labnumber/.estore in=\assignmentLabNumber,%
-  keywords/.estore in=\assignmentKeywords%
+  keywords/.estore in=\assignmentKeywords,%
+  abstract/.estore in=\assignmentAbstract%
 }
 
 % Default values
@@ -24,9 +26,11 @@
 \def\assignmentDate{}
 \def\assignmentAuthors{}
 \def\assignmentCourse{}
-\def\assignmentUniversity{Universidad del Valle}
+\def\assigmentProfessor{}
+\def\assignmentUniversity{}
 \def\assignmentLabNumber{}
 \def\assignmentKeywords{}
+\def\assignmentAbstract{}
 
 % ---------- Setup command (call in preamble) ----------
 \NewDocumentCommand{\assignmentsetup}{m}{%
@@ -46,9 +50,14 @@
   \def\@info{%
     \ifx\assignmentUniversity\empty\else \assignmentUniversity \\ \fi
     \ifx\assignmentCourse\empty\else \assignmentCourse \\ \fi
+    \ifx \assigmentProfessor\empty\else
+    \assigmentProfessor \\ \fi
     \ifx\assignmentLabNumber\empty\else \assignmentLabNumber \\ \fi
+    % \ifx\assignmentAbstract\empty\else
+    % \assignmentAbstract \\ \fi
   }%
   \def\@abstract{\assignmentKeywords}%
+  \def\@abstractbody{\assignmentAbstract}%
   % Render title automatically at \begin{document}
   \AtBeginDocument{\maketitle\vspace{1em}}%
 }

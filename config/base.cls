@@ -6,14 +6,10 @@
 \def\input@path{{./}{./config/}{./style/}{./design/}}
 \makeatother
 
-% ---------- Core packages ----------
-\RequirePackage{geometry}
-\geometry{margin=1in}
-
-
 
 % ---------- Load internal style ----------
 \RequirePackage{config/dependencies}
+\RequirePackage{style/myEnv}
 \RequirePackage{style/commands}
 \RequirePackage{style/colors}
 \RequirePackage{config/environments}

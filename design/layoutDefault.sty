@@ -1,29 +1,61 @@
 \ProvidesPackage{design/default}
 
+
 \makeatletter
+% ---------- Page geometry ----------
+\geometry{%
+  paperheight=29.7cm, paperwidth=21cm,%
+  nomarginpar,%
+  textwidth=16cm, headheight=1cm,%
+  top=2.5cm, bottom=2.5cm,%
+  includehead%
+}
+\setlength{\headsep}{10pt}
+
+% ---------- Custom page style ----------
+\def\ps@assignmentstyle{%
+  \def\@oddhead{%
+    \small\mbox{\assignmentLabNumber}\ |\ \mbox{\assignmentDate}%
+    \hfil%
+    \small\thepage%
+  }%
+  \let\@evenhead\@oddhead
+  \def\@oddfoot{}%
+  \let\@evenfoot\@oddfoot
+}
+\AtBeginDocument{\pagestyle{assignmentstyle}}
+
+
 
 % ---------- Title formatting ----------
 \renewcommand{\@maketitle}{%
- \thispagestyle{plain}
- \begin{flushleft}
-  {\fontsize{14}{14}\selectfont \@title \par}
-  \vspace{12pt}
-  {\@author \par}
-  {\def\and{\\\vspace{14pt}} \normalfont\@info \par}
- \end{flushleft}
- \vspace{5pt}
- \noindent {\em Palabras Clave:\space}{\@abstract}
- \par
- \vspace{42pt}
+  \thispagestyle{assignmentstyle}%
+  \begin{flushleft}%
+    {\fontsize{14}{14}\selectfont\bfseries \@title \par}%
+    \vspace{12pt}%
+    {\@author \par}%
+    \vspace{4pt}%
+    {\def\and{\\\vspace{14pt}}\normalfont\@info \par}%
+  \end{flushleft}%
+  \vspace{5pt}%
+  \noindent{\em Palabras Clave:\space}{\@abstract}%
+  \par
+  \ifx\@abstractbody\empty\else
+    \vspace{10pt}%
+    \noindent\textbf{Abstract.}\space{\em\@abstractbody}%
+    \par
+  \fi
+  \vspace{42pt}%
 }
+
 
 % ---------- Section styles ----------
 \renewcommand{\section}{%
-  \@startsection{section}{1}{6mm}{12pt}{1pt}{\normalsize\bfseries}
+  \@startsection{section}{1}{6mm}{12pt}{1pt}{\normalsize\bfseries}%
 }
 
 \renewcommand{\subsection}{%
-  \@startsection{subsection}{2}{6mm}{12pt}{1pt}{\normalfont\itshape}
+  \@startsection{subsection}{2}{6mm}{12pt}{1pt}{\normalfont\itshape}%
 }
 
 % ---------- Caption style ----------
@@ -33,20 +65,11 @@
   \ifdim \wd\@tempboxa >\hsize
     \normalsize\fontsize{10}{12}\selectfont #1: #2\par
   \else
-    \global \@minipagefalse
+    \global\@minipagefalse
     \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
   \fi
   \vskip\belowcaptionskip
 }
-
-% ---------- Page layout ----------
-\setlength{\oddsidemargin}{-5mm}
-\setlength{\evensidemargin}{-5mm}
-\setlength{\topmargin}{-10mm}
-\setlength{\headheight}{24.6mm}
-\setlength{\headsep}{10pt}
-\setlength{\textheight}{250mm}
-\setlength{\textwidth}{165mm}
 
 % ---------- Spacing ----------
 \setlength{\textfloatsep}{12pt}
@@ -56,8 +79,5 @@
 \setlength{\abovecaptionskip}{6pt}
 \setlength{\belowcaptionskip}{6pt}
 \setlength{\itemsep}{0pt}
-
-% ---------- Page style ----------
-\pagestyle{plain}
 
 \makeatother
