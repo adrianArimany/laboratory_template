@@ -1,4 +1,3 @@
-\NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{config/base}[2026/03/21 Modular Lab Class]
 
 \LoadClass[12pt,a4paper]{article}
@@ -17,4 +16,4 @@
 \RequirePackage{config/dependencies}
 \RequirePackage{style/commands}
 \RequirePackage{style/colors}
-\RequirePackage{style/environments}
+\RequirePackage{config/environments}

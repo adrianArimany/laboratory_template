@@ -1,0 +1,68 @@
+\ProvidesPackage{config/environments}
+
+\RequirePackage{pgfkeys}
+\RequirePackage{xparse}
+
+\makeatletter   
+% ---------- Define keys ----------
+\pgfkeys{%
+  /assignment/.is family,%
+  /assignment,%
+  design/.estore in=\assignmentDesign,%
+  title/.estore in=\assignmentTitle,%
+  date/.estore in=\assignmentDate,%
+  authors/.estore in=\assignmentAuthors,%
+  course/.estore in=\assignmentCourse,%
+  university/.estore in=\assignmentUniversity,%
+  labnumber/.estore in=\assignmentLabNumber,%
+  keywords/.estore in=\assignmentKeywords%
+}
+
+% Default values
+\def\assignmentDesign{default}
+\def\assignmentTitle{}
+\def\assignmentDate{}
+\def\assignmentAuthors{}
+\def\assignmentCourse{}
+\def\assignmentUniversity{Universidad del Valle}
+\def\assignmentLabNumber{}
+\def\assignmentKeywords{}
+
+% ---------- Setup command (call in preamble) ----------
+\NewDocumentCommand{\assignmentsetup}{m}{%
+  % Parse options
+  \pgfkeys{/assignment/.cd, #1}%
+  % Load selected design
+  \IfFileExists{design/layout\assignmentDesign.sty}{%
+    \input{design/layout\assignmentDesign.sty}%
+  }{%
+    \PackageWarning{assignment}{Design `\assignmentDesign' not found. Using default}%
+    \input{design/layoutDefault.sty}%
+  }%
+  % Wire metadata
+  \title{\assignmentTitle}%
+  \author{\assignmentAuthors}%
+  \date{\assignmentDate}%
+  \def\@info{%
+    \ifx\assignmentUniversity\empty\else \assignmentUniversity \\ \fi
+    \ifx\assignmentCourse\empty\else \assignmentCourse \\ \fi
+    \ifx\assignmentLabNumber\empty\else \assignmentLabNumber \\ \fi
+  }%
+  \def\@abstract{\assignmentKeywords}%
+  % Render title automatically at \begin{document}
+  \AtBeginDocument{\maketitle\vspace{1em}}%
+}
+
+
+
+% % ---------- Environment ----------
+% % Options can be passed here (document body) or via \assignmentsetup (preamble)
+% \NewDocumentEnvironment{assignment}{o}{%
+%   \IfNoValueF{#1}{\assignmentsetup{#1}}%
+%   \maketitle
+%   \vspace{1em}%
+% }{}
+
+
+
+\makeatother   
