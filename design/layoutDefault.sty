@@ -1,4 +1,4 @@
-\ProvidesPackage{design/default}
+\ProvidesPackage{design/layoutDefault}
 
 
 \makeatletter
@@ -10,12 +10,12 @@
   top=2.5cm, bottom=2.5cm,%
   includehead%
 }
-\setlength{\headsep}{10pt}
+\setlength{\headsep}{20pt}
 
 % ---------- Custom page style ----------
 \def\ps@assignmentstyle{%
   \def\@oddhead{%
-    \small\mbox{\assignmentLabNumber}\ |\ \mbox{\assignmentDate}%
+    \small\mbox{\assignmentLabNumber}\ $|$\ \mbox{\assignmentDate}%
     \hfil%
     \small\thepage%
   }%
@@ -31,10 +31,10 @@
 \renewcommand{\@maketitle}{%
   \thispagestyle{assignmentstyle}%
   \begin{flushleft}%
-    {\fontsize{14}{14}\selectfont\bfseries \@title \par}%
+    {\fontsize{18}{18}\selectfont\bfseries \@title \par}%
     \vspace{12pt}%
-    {\@author \par}%
-    \vspace{4pt}%
+    {\fontsize{14}{14}\selectfont \@author \par}%
+    \vspace{10pt}%
     {\def\and{\\\vspace{14pt}}\normalfont\@info \par}%
   \end{flushleft}%
   \vspace{5pt}%

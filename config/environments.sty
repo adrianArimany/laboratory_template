@@ -52,14 +52,13 @@
     \ifx\assignmentCourse\empty\else \assignmentCourse \\ \fi
     \ifx \assigmentProfessor\empty\else
     \assigmentProfessor \\ \fi
-    \ifx\assignmentLabNumber\empty\else \assignmentLabNumber \\ \fi
     % \ifx\assignmentAbstract\empty\else
     % \assignmentAbstract \\ \fi
   }%
   \def\@abstract{\assignmentKeywords}%
   \def\@abstractbody{\assignmentAbstract}%
   % Render title automatically at \begin{document}
-  \AtBeginDocument{\maketitle\vspace{1em}}%
+  \AtBeginDocument{\maketitle\thispagestyle{assignmentstyle}\vspace{1em}}%
 }
 
 
