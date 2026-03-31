@@ -36,6 +36,8 @@
 \NewDocumentCommand{\assignmentsetup}{m}{%
   % Parse options
   \pgfkeys{/assignment/.cd, #1}%
+    % Default title renderer (layouts may override this)
+   \def\assignmentRenderTitle{\maketitle}%
   % Load selected design
   \IfFileExists{design/layout\assignmentDesign.sty}{%
     \input{design/layout\assignmentDesign.sty}%
@@ -58,7 +60,7 @@
   \def\@abstract{\assignmentKeywords}%
   \def\@abstractbody{\assignmentAbstract}%
   % Render title automatically at \begin{document}
-  \AtBeginDocument{\maketitle\thispagestyle{assignmentstyle}\vspace{1em}}%
+  \AtBeginDocument{\assignmentRenderTitle\thispagestyle{assignmentstyle}\vspace{1em}}%
 }
 
 

@@ -1,0 +1,76 @@
+\ProvidesPackage{design/layoutCompact}
+\makeatletter
+
+% ---------- Page geometry ----------
+\geometry{%
+  paperheight=29.7cm, paperwidth=21cm,%
+  nomarginpar,%
+  textwidth=16cm, headheight=1cm,%
+  top=2.5cm, bottom=2.5cm,%
+  includehead%
+}
+\setlength{\headsep}{20pt}
+
+% ---------- Two-column body ----------
+\def\assignmentRenderTitle{\twocolumn[\maketitle]}
+
+
+% ---------- Custom page style (no fancyhdr needed) ----------
+\def\ps@assignmentstyle{%
+  \def\@oddhead{%
+    \small\mbox{\assignmentLabNumber}\ |\ \mbox{\assignmentDate}%
+    \hfil%
+    \small\thepage%
+  }%
+  \let\@evenhead\@oddhead
+  \def\@oddfoot{}%
+  \let\@evenfoot\@oddfoot
+}
+\AtBeginDocument{\pagestyle{assignmentstyle}}
+
+% ---------- Title formatting ----------
+\renewcommand{\@maketitle}{%
+  \begin{flushleft}%
+    {\fontsize{14}{14}\selectfont\bfseries \@title \par}%
+    \vspace{12pt}%
+    {\@author \par}%
+    \vspace{4pt}%
+    {\def\and{\\\vspace{14pt}}\normalfont\@info \par}%
+  \end{flushleft}%
+  \vspace{5pt}%
+  \noindent{\em Palabras Clave:\space}{\@abstract}%
+  \par
+  \vspace{42pt}%
+}
+
+% ---------- Section styles (titlesec-compatible) ----------
+\titleformat{\section}{\normalsize\bfseries}{\thesection.}{0.5em}{}
+\titlespacing{\section}{0pt}{12pt}{1pt}
+
+\titleformat{\subsection}{\normalfont\itshape}{\thesubsection.}{0.5em}{}
+\titlespacing{\subsection}{0pt}{12pt}{1pt}
+
+% ---------- Caption style ----------
+\renewcommand{\@makecaption}[2]{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{\normalsize\fontsize{10}{12}\selectfont #1: #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    \normalsize\fontsize{10}{12}\selectfont #1: #2\par
+  \else
+    \global\@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip
+}
+
+% ---------- Spacing ----------
+\setlength{\textfloatsep}{12pt}
+\setlength{\abovedisplayskip}{6pt}
+\setlength{\belowdisplayskip}{6pt}
+\setlength{\parindent}{5mm}
+\setlength{\abovecaptionskip}{6pt}
+\setlength{\belowcaptionskip}{6pt}
+\setlength{\itemsep}{0pt}
+
+\makeatother
+  
